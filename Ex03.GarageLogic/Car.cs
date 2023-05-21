@@ -23,8 +23,8 @@ namespace Ex03.GarageLogic
             Five = 5
         }
 
-        private eColor m_Color;
-        private eNumOfDoors m_NumOfDoors;
+        public eColor m_Color;
+        public eNumOfDoors m_NumOfDoors;
 
         public Car(string i_type) : base(i_type)
         {

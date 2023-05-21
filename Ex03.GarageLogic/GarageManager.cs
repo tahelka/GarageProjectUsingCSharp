@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Ex03.GarageLogic.Garage;
 
 namespace Ex03.GarageLogic
 {
@@ -13,13 +14,15 @@ namespace Ex03.GarageLogic
             m_garage = new Garage();
         }
 
+        public Garage Garage { get; }
+
         public void EnterNewCar(string i_licensePlate)
         {
             if (m_garage.isVehicleInGarage(i_licensePlate))
             {
                 // Car already exists in the garage, set its status to "Under repair"
-                Garage.GaragedVehicle existingCar = m_garage.m_VehiclesInGarage[i_licensePlate];
-                existingCar.m_VehicleStatus = (Garage.GaragedVehicle.eVehicleStatus)Enum.Parse(typeof(Garage.GaragedVehicle.eVehicleStatus), "BeingRepaired");
+                Garage.GaragedVehicle existingCar = m_garage.VehiclesInGarage[i_licensePlate];
+                existingCar.VehicleStatus = (Garage.GaragedVehicle.eVehicleStatus)Enum.Parse(typeof(Garage.GaragedVehicle.eVehicleStatus), "BeingRepaired");
                 // CANT BE HERE !!! Console.WriteLine("Car is already in the garage. Setting status to 'Under repair'.");
             }
             else
@@ -122,6 +125,20 @@ namespace Ex03.GarageLogic
             // ...
 
             Console.WriteLine("Vehicle details entered.");
+        }
+
+        public List<string> getVehiclesPlateNumbersByStatus(Garage.GaragedVehicle.eVehicleStatus i_status)
+        {
+            List<string> plateNumbers = null;
+            foreach (GaragedVehicle vehicle in m_garage.VehiclesInGarage.Values)
+            {
+                if (vehicle.VehicleStatus == i_status || vehicle.VehicleStatus == GaragedVehicle.eVehicleStatus.All)
+                {
+                    plateNumbers.Add(vehicle.Vehicle.m_PlateNumber);
+                }
+            }
+
+            return plateNumbers;
         }
     }
 }

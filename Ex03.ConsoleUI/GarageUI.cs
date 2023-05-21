@@ -7,6 +7,8 @@ using System.Reflection;
 using VehicleCreator = Ex03.GarageLogic.VehicleCreator;
 using GarageManager = Ex03.GarageLogic.GarageManager;
 using Vehicle = Ex03.GarageLogic.Vehicle;
+using  Ex03.GarageLogic;
+using static Ex03.GarageLogic.Garage;
 
 namespace Ex03.ConsoleUI
 {
@@ -28,7 +30,7 @@ namespace Ex03.ConsoleUI
             changeVeihcleStatus,
             inflateTiersToMax,
             fillFuelTank,
-            chargeVehicalBattery,
+            chargevehicleBattery,
             getVehicleByPlateNum,
             exit
         }
@@ -41,14 +43,15 @@ namespace Ex03.ConsoleUI
                     EnterNewVehicleToGarage();
                     break;
                 case eActions.showVehicleInGarage:
-
+                    ShowVehiclesInGarage();
+                    break;
                 case eActions.changeVeihcleStatus:
 
                 case eActions.inflateTiersToMax:
 
                 case eActions.fillFuelTank:
 
-                case eActions.chargeVehicalBattery:
+                case eActions.chargevehicleBattery:
 
                 case eActions.getVehicleByPlateNum:
 
@@ -56,6 +59,47 @@ namespace Ex03.ConsoleUI
                     break;
                     //default:
                     //    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void ShowVehiclesInGarage()
+        {
+            GaragedVehicle.eVehicleStatus filter;
+            Console.WriteLine("Please choose one of the following options:");
+            printStatusMenu();
+            Enum.TryParse(Console.ReadLine(), out filter);
+
+            PrintVehiclesByFilter(filter);
+        }
+
+        private void PrintVehiclesByFilter(GaragedVehicle.eVehicleStatus i_Filter)
+        {
+            Console.WriteLine(
+                i_Filter != GaragedVehicle.eVehicleStatus.All
+                    ? $"All vehicles in the garage in status {i_Filter}:"
+                    : "All vehicles in the garage:");
+
+            List<string> vehiclesList = m_GarageManager.getVehiclesPlateNumbersByStatus(i_Filter);
+            if(vehiclesList != null)
+            {
+                foreach(string plateNumber in vehiclesList)
+                {
+                    Console.WriteLine(plateNumber);
+                }
+            }
+            else
+            {
+                Console.WriteLine("None");
+            }
+        }
+
+        private void printStatusMenu()
+        {
+            foreach (Garage.GaragedVehicle.eVehicleStatus status in Enum.GetValues(typeof(Garage.GaragedVehicle.eVehicleStatus)))
+            {
+                int value = (int)status;
+                string optionName = status.ToString();
+                Console.WriteLine($"{value}. {optionName}");
             }
         }
 
@@ -82,12 +126,12 @@ namespace Ex03.ConsoleUI
         public void printActionsMenu()
         {
             Console.WriteLine($@"
-1. Enter New Vechicle to the garage
+1. Enter New vehicle to the garage
 2. Show Vehicles In the Garage
-3. Change the status of Veihcle in the garage
-4. inflate Tiers of a vehical To Maximum
+3. Change the status of vehicle in the garage
+4. inflate Tiers of a vehicle To Maximum
 5. fill Fuel the Tank
-6. Charge Vehical Battery
+6. Charge vehicle Battery
 7. get Vehicle details
 8. exit");
         }
@@ -102,7 +146,7 @@ namespace Ex03.ConsoleUI
             // enter number, color, wheels
 
             //create the vehicle
-            //vhicle.getDetails()
+            //vehicle.getDetails()
 
 
         }
@@ -141,7 +185,7 @@ namespace Ex03.ConsoleUI
             try
             {
                 Console.WriteLine("Please enter vehicle type from the following options which you would like to enter into our garage");
-                printAllSupportedVehicaleTypes();
+                printAllSupportedvehicleeTypes();
                 Enum.TryParse(Console.ReadLine(), out vehicleChosenType);
             }
             catch (ArgumentException)
@@ -153,7 +197,7 @@ namespace Ex03.ConsoleUI
             return vehicleChosenType;
         }
 
-        public void printAllSupportedVehicaleTypes()
+        public void printAllSupportedvehicleeTypes()
         {
             foreach (VehicleCreator.eSupportedVehicleTypes action in Enum.GetValues(typeof(VehicleCreator.eSupportedVehicleTypes)))
             {
