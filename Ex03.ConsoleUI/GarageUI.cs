@@ -137,45 +137,116 @@ namespace Ex03.ConsoleUI
         }
 
         public void EnterNewVehicleToGarage()
+        {         
+            string plateNumberOfVehicle = GetLicenseNumberOfVehicle();
+            bool isVehicleInGarage = m_GarageManager.Garage.isVehicleInGarage(plateNumberOfVehicle);
+
+            if (isVehicleInGarage)
+            {
+                //
+            }
+            else
+            {
+                VehicleCreator.eSupportedVehicleTypes vehicleType = GetVehicleTypeFromUser();
+                Vehicle newVehicleToEnterToGarage = CreateVehicleWithBasicPropertiesFromUser(vehicleType, plateNumberOfVehicle);
+                newVehicleToEnterToGarage.m_Engine.UpdateEngineIfVehicleIsElectric(vehicleType);
+                GetWheelsDetailsFromUser(newVehicleToEnterToGarage);
+                
+
+            }
+        }
+
+        public void GetWheelsDetailsFromUser(Vehicle i_vehicle)
         {
-            VehicleCreator.eSupportedVehicleTypes vehicleType = GetVehicleTypeFromUser();
-            Vehicle newVehicleToEnterToGarage = m_VehicleCreator.buildVehicleByType(vehicleType);
+            string wheelManufacturer;
+            int WheelMaxTierPressureByManufacturer;
+            int wheelCurrentTierPressure;
 
-            askUserEnterDetailsOfVehicle(newVehicleToEnterToGarage);
+            Console.WriteLine("Would you like to set all wheels with the same parameters? Y/N");
+            string userAnswer = Console.ReadLine();
+            if(userAnswer != "Y" && userAnswer != "N")
+            {
+                throw new Exception("Invalid Input");
+            }
 
-            // enter number, color, wheels
+            if (userAnswer == "Y")
+            {
+                askUserForWheelDetails(out wheelManufacturer, out WheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
+                i_vehicle.attachAllWheelsWithSameDetails(wheelManufacturer, WheelMaxTierPressureByManufacturer, wheelCurrentTierPressure); 
+            }
+            else
+            {
+                for (int i = 0; i < i_vehicle.m_Wheels.Capacity; i++)
+                {
+                    askUserForWheelDetails(out wheelManufacturer, out WheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
+                    i_vehicle.attachWheel(wheelManufacturer, WheelMaxTierPressureByManufacturer, wheelCurrentTierPressure);
+                }
+            }
+        }
 
-            //create the vehicle
-            //vehicle.getDetails()
+        public void askUserForWheelDetails(out string o_Manufacturer, out int o_MaxTierPressureByManufacturer, out int o_CurrentTierPressure)
+        {
+            Console.WriteLine("Please enter wheel manufacturer");
+            o_Manufacturer = Console.ReadLine();
 
+            Console.WriteLine("Please enter max tier pressure by manufacturer");
+            int.TryParse(Console.ReadLine(), out o_MaxTierPressureByManufacturer);
+            // check if parse did well
+
+            Console.WriteLine("Please enter current tier pressure");
+            int.TryParse(Console.ReadLine(), out o_CurrentTierPressure);
+            // check if parse did well
 
         }
 
-        public void askUserEnterDetailsOfVehicle(Vehicle i_Vehicle)
+        public Vehicle CreateVehicleWithBasicPropertiesFromUser(VehicleCreator.eSupportedVehicleTypes vehicleType, string i_PlateNumberOfVehicle)
         {
-            Type typeOfVehicle = i_Vehicle.GetType();
-            MethodInfo[] allMethods = typeOfVehicle.GetMethods();
-            List<ParameterInfo[]> methodsParamsOfGivenVehicle = new List<ParameterInfo[]>();
-
-
-            foreach (MethodInfo method in allMethods)
+            Console.WriteLine("Please enter model of vehicle");
+            string modelOfVehicle = Console.ReadLine();
+            
+            Console.WriteLine("Please enter energy precent left in vehicle");
+            if(!float.TryParse(Console.ReadLine(), out float energyPrecentLeft))
             {
-                methodsParamsOfGivenVehicle.Add(method.GetParameters());
+                throw new FormatException();
             }
 
-            int i = 1;
-            foreach (ParameterInfo[] param in methodsParamsOfGivenVehicle)
-            {
-                Console.WriteLine($"params of method number {i}");
-                foreach (ParameterInfo par in param)
-                {
-                    Console.WriteLine(par.Name);
+            return m_VehicleCreator.buildVehicleByType(vehicleType, modelOfVehicle, i_PlateNumberOfVehicle, energyPrecentLeft);
 
-                }
-                i++;
+        }
+
+
+        public bool isVehicleElectric()
+        {
+            bool isElectricVehicle;
+
+            Console.WriteLine("Is your vehicle on battery? Y/N");
+            string userChoice = Console.ReadLine();
+            if (userChoice != "Y" && userChoice != "N")
+            {
+                throw new Exception("Please Enter Y/N");
             }
 
+            isElectricVehicle = userChoice == "Y" ? true : false;           
 
+            return isElectricVehicle;
+        }
+        
+        public string GetLicenseNumberOfVehicle()
+        {
+            Console.WriteLine("Please enter Number Of Vehicle");
+            return Console.ReadLine();
+        }
+
+        public void GetOwnerDetails(GaragedVehicle i_VehicleInGarage)
+        {
+            // DRAFT! NOT READY METHOD
+
+            Console.WriteLine("Please enter owner's name");
+            i_VehicleInGarage.OwnerName = Console.ReadLine();
+            Console.WriteLine("Please enter owner's phone number");
+            i_VehicleInGarage.OwnerPhoneNumber = int.Parse(Console.ReadLine());
+
+            i_VehicleInGarage.VehicleStatus = GaragedVehicle.eVehicleStatus.BeingRepaired;
         }
 
         public VehicleCreator.eSupportedVehicleTypes GetVehicleTypeFromUser()

@@ -8,20 +8,19 @@ namespace Ex03.GarageLogic
 {
     public class GarageManager
     {
-        private Garage m_garage;
+        public Garage Garage { get; }
         public GarageManager()
         {
-            m_garage = new Garage();
+            Garage = new Garage();
         }
 
-        public Garage Garage { get; }
 
         public void EnterNewCar(string i_licensePlate)
         {
-            if (m_garage.isVehicleInGarage(i_licensePlate))
+            if (Garage.isVehicleInGarage(i_licensePlate))
             {
                 // Car already exists in the garage, set its status to "Under repair"
-                Garage.GaragedVehicle existingCar = m_garage.VehiclesInGarage[i_licensePlate];
+                Garage.GaragedVehicle existingCar = Garage.VehiclesInGarage[i_licensePlate];
                 existingCar.VehicleStatus = (Garage.GaragedVehicle.eVehicleStatus)Enum.Parse(typeof(Garage.GaragedVehicle.eVehicleStatus), "BeingRepaired");
                 // CANT BE HERE !!! Console.WriteLine("Car is already in the garage. Setting status to 'Under repair'.");
             }
@@ -130,7 +129,7 @@ namespace Ex03.GarageLogic
         public List<string> getVehiclesPlateNumbersByStatus(Garage.GaragedVehicle.eVehicleStatus i_status)
         {
             List<string> plateNumbers = null;
-            foreach (GaragedVehicle vehicle in m_garage.VehiclesInGarage.Values)
+            foreach (GaragedVehicle vehicle in Garage.VehiclesInGarage.Values)
             {
                 if (vehicle.VehicleStatus == i_status || vehicle.VehicleStatus == GaragedVehicle.eVehicleStatus.All)
                 {

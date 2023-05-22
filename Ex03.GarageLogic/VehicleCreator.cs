@@ -23,60 +23,35 @@ namespace Ex03.GarageLogic
             m_VehicleTypesSupportedInSystem = new List<string>() { "Car", "Motorcycle", "Truck"};
         }
 
-        public Vehicle buildVehicleByType(eSupportedVehicleTypes i_type)
+        public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft)
         {
             Vehicle res;
+            bool isElectricCar = true;
 
-            switch (i_type)
+            switch (i_vehicleType)
             {
                 case eSupportedVehicleTypes.ElectricCar:
-                    res = BuildElectricCar();
-                    break;
                 case eSupportedVehicleTypes.DieselCar:
-                    res = BuildDieselCar();
-                    break;
+                    res = new Car(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
+                    break;                  
                 case eSupportedVehicleTypes.ElectricMotorcycle:
-                    res = BuildElectricMotorcycle();
-                    break;
                 case eSupportedVehicleTypes.DieselMotorcycle:
-                    res = BuildDieselMotorcycle();
+                    res = new Motorcycle(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
                     break;
                 case eSupportedVehicleTypes.Truck:
-                    res = BuildTruck();
+                    res = new Truck(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
                     break;
                 default:
-                    res = null; 
+                    throw new ArgumentException();
                     break;
             }
 
+           
             return res;
         }
 
-        public Vehicle BuildElectricCar()
-        {
-            return new Car("electric");
-        }
-
-        public Vehicle BuildDieselCar()
-        {
-            return new Car("diesel");
-        }
-
-        public Vehicle BuildElectricMotorcycle()
-        {
-            return new Motorcycle("electric");
-        }
-
-        public Vehicle BuildDieselMotorcycle()
-        {
-            return new Motorcycle("diesel");
-        }
-
-        public Vehicle BuildTruck()
-        {
-            return new Truck();
-        }
-
+        
+       
 
     }
 }
