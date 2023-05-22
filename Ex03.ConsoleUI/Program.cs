@@ -11,7 +11,12 @@ namespace Ex03.ConsoleUI
         public static int Main()
         {
             ConsoleUI.GarageUI userInterface = new ConsoleUI.GarageUI();
-            userInterface.ChooseAction();
+
+            while (true)
+            {
+                userInterface.ChooseAction();
+            }
+
             return 0;
         }
     }

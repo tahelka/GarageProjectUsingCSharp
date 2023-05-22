@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using VehicleCreator = Ex03.GarageLogic.VehicleCreator;
 using GarageManager = Ex03.GarageLogic.GarageManager;
 using Vehicle = Ex03.GarageLogic.Vehicle;
 using  Ex03.GarageLogic;
 using static Ex03.GarageLogic.Garage;
+using static Ex03.GarageLogic.Car;
 
 namespace Ex03.ConsoleUI
 {
@@ -42,13 +44,15 @@ namespace Ex03.ConsoleUI
                 case eActions.enterNewVechicle:
                     EnterNewVehicleToGarage();
                     break;
-                case eActions.showVehicleInGarage:
+                case eActions.showVehicleInGarage: //done
                     ShowVehiclesInGarage();
                     break;
-                case eActions.changeVeihcleStatus:
-
+                case eActions.changeVeihcleStatus: //done
+                    ChangeVeihcleStatus();
+                    break;
                 case eActions.inflateTiersToMax:
-
+                    inflateTiersToMax(); //done
+                    break;
                 case eActions.fillFuelTank:
 
                 case eActions.chargevehicleBattery:
@@ -62,13 +66,42 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        private void ShowVehiclesInGarage()
+        private void inflateTiersToMax()
         {
-            GaragedVehicle.eVehicleStatus filter;
+            string plateNumber = GetLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            {
+                throw new ArgumentException();
+            }
+
+            m_GarageManager.InflateTiersToMax(plateNumber);
+        }
+
+        private void ChangeVeihcleStatus()
+        {
+            string plateNumber = GetLicenseNumberOfVehicle();
+            if(!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            {
+                throw new ArgumentException();
+            }
+
+            GaragedVehicle.eVehicleStatus newStatus = ChooseStatusOfVehicle();
+            m_GarageManager.setStatusOfAVehicle(plateNumber, newStatus);
+        }
+
+        private GaragedVehicle.eVehicleStatus ChooseStatusOfVehicle()
+        {
+            GaragedVehicle.eVehicleStatus status;
             Console.WriteLine("Please choose one of the following options:");
             printStatusMenu();
-            Enum.TryParse(Console.ReadLine(), out filter);
+            Enum.TryParse(Console.ReadLine(), out status);
 
+            return status;
+        }
+
+        private void ShowVehiclesInGarage()
+        {
+            GaragedVehicle.eVehicleStatus filter = ChooseStatusOfVehicle();
             PrintVehiclesByFilter(filter);
         }
 
@@ -149,7 +182,14 @@ namespace Ex03.ConsoleUI
             {
                 VehicleCreator.eSupportedVehicleTypes vehicleType = GetVehicleTypeFromUser();
                 Vehicle newVehicleToEnterToGarage = CreateVehicleWithBasicPropertiesFromUser(vehicleType, plateNumberOfVehicle);
-                newVehicleToEnterToGarage.m_Engine.UpdateEngineIfVehicleIsElectric(vehicleType);
+                if(newVehicleToEnterToGarage.isElectric(vehicleType))
+                {
+                    newVehicleToEnterToGarage.m_Engine = new ElectricEngine();
+                }
+                else
+                {
+                    newVehicleToEnterToGarage.m_Engine = new DieselEngine();
+                }
                 GetWheelsDetailsFromUser(newVehicleToEnterToGarage);
                 
 
@@ -244,7 +284,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Please enter owner's name");
             i_VehicleInGarage.OwnerName = Console.ReadLine();
             Console.WriteLine("Please enter owner's phone number");
-            i_VehicleInGarage.OwnerPhoneNumber = int.Parse(Console.ReadLine());
+            i_VehicleInGarage.OwnerPhoneNumber = Console.ReadLine();
 
             i_VehicleInGarage.VehicleStatus = GaragedVehicle.eVehicleStatus.BeingRepaired;
         }
@@ -276,6 +316,30 @@ namespace Ex03.ConsoleUI
                 string optionName = action.ToString();
                 Console.WriteLine($"{value}. {optionName}");
             }
+        }
+
+        public eNumOfDoors ChooseNumOfDoors()
+        {
+            Console.WriteLine("choose number of doors from the list");
+            foreach (eNumOfDoors value in Enum.GetValues(typeof(eNumOfDoors)))
+            {
+                Console.WriteLine(value.ToString());
+            }
+
+            Enum.TryParse(Console.ReadLine(), out eNumOfDoors res);
+            return res;
+        }
+
+        public eColor ChooseCarColor()
+        {
+            Console.WriteLine("choose the color of the car from the list");
+            foreach (eColor value in Enum.GetValues(typeof(eColor)))
+            {
+                Console.WriteLine(value.ToString());
+            }
+
+            Enum.TryParse(Console.ReadLine(), out eColor res);
+            return res;
         }
 
     }

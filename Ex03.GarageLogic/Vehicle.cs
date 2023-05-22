@@ -18,6 +18,7 @@ namespace Ex03.GarageLogic
             m_Model = i_ModelOfVehicle;
             m_PlateNumber = i_PlateNumberOfVehicle;
             m_EnergyPrecentleft = i_EnergyPrecentLeft;
+            m_Wheels = new List<Wheel>();
         }
 
         public void attachWheel(string i_Manufacturer, int i_MaxTierPressureByManufacturer, int i_CurrentTierPressure)
@@ -38,8 +39,10 @@ namespace Ex03.GarageLogic
 
         }
 
-
-
+        public bool isElectric(VehicleCreator.eSupportedVehicleTypes i_VehicleType)
+        {
+            return i_VehicleType.ToString().IndexOf("electric", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
 
 
     }

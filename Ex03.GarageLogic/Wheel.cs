@@ -28,5 +28,10 @@ namespace Ex03.GarageLogic
             CurrentTierPressure = i_AirPressureAmountToAdd;
         }
 
+        public void WheelInflateToMax()
+        {
+            CurrentTierPressure = MaxTierPressureByManufacturer;
+        }
+
     }
 }

@@ -19,15 +19,5 @@ namespace Ex03.GarageLogic
         {
             EnergyAmountLeft = i_EnergyToAdd;
         }
-
-        public void UpdateEngineIfVehicleIsElectric(VehicleCreator.eSupportedVehicleTypes i_VehicleType)
-        {
-            bool isVehicleElectric = i_VehicleType.ToString().IndexOf("electric", StringComparison.OrdinalIgnoreCase) >= 0;
-            
-            if (isVehicleElectric)
-            {
-                isElectricEngine = true;
-            }
-        }
     }
 }

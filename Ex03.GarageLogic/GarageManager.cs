@@ -60,44 +60,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        private Garage.GaragedVehicle AddElectricCar()
-        {
-            // Prompt the user for electric car details and create a new Garage.GaragedVehicle object
-            // ...
-            return new Garage.GaragedVehicle(/* vehicle details */);
-        }
-
-        private Garage.GaragedVehicle AddDieselCar()
-        {
-            // Prompt the user for diesel car details and create a new Garage.GaragedVehicle object
-            // ...
-            return new Garage.GaragedVehicle(/* vehicle details */);
-        }
-
-        private Garage.GaragedVehicle AddTruck()
-        {
-            // Prompt the user for truck details and create a new Garage.GaragedVehicle object
-            // ...
-            return new Garage.GaragedVehicle(/* vehicle details */);
-        }
-
-        private Garage.GaragedVehicle AddElectricMotorcycle()
-        {
-            // Prompt the user for electric motorcycle details and create a new Garage.GaragedVehicle object
-            // ...
-            return new Garage.GaragedVehicle(/* vehicle details */);
-        }
-
-        private Garage.GaragedVehicle AddDieselMotorcycle()
-        {
-            // Prompt the user for diesel motorcycle details and create a new Garage.GaragedVehicle object
-            // ...
-            return new Garage.GaragedVehicle(/* vehicle details */);
-        }
-
-
-        
-
         //private Vehicle CreateNewVehicle(string vehicleType)
         //{
         //    // Create a new vehicle based on the provided type and prompt the user for its details
@@ -138,6 +100,20 @@ namespace Ex03.GarageLogic
             }
 
             return plateNumbers;
+        }
+
+        public void setStatusOfAVehicle(string i_PlateNumber, GaragedVehicle.eVehicleStatus i_NewStatus)
+        {
+            Garage.VehiclesInGarage[i_PlateNumber].VehicleStatus = i_NewStatus;
+        }
+
+        public void InflateTiersToMax(string i_PlateNumber)
+        {
+            Vehicle vehicle = Garage.VehiclesInGarage[i_PlateNumber].Vehicle;
+            foreach(Wheel wheel in vehicle.m_Wheels)
+            {
+                wheel.WheelInflateToMax();
+            }
         }
     }
 }
