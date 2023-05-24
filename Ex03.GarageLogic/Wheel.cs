@@ -33,5 +33,16 @@ namespace Ex03.GarageLogic
             CurrentTierPressure = MaxTierPressureByManufacturer;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Manufacturer: {m_Manufacturer}");
+            sb.AppendLine($"Max Tire Pressure: {MaxTierPressureByManufacturer}");
+            sb.AppendLine($"Current Tire Pressure: {CurrentTierPressure}");
+
+            return sb.ToString();
+        }
+
+
     }
 }

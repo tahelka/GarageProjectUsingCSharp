@@ -17,10 +17,33 @@ namespace Ex03.GarageLogic
 
         private eFuelType m_FuelType;
 
-        public void AddEnergyToEngine(float i_energyToAdd, string i_fuelType)
+        public eFuelType FuelType
         {
-            Enum.TryParse(i_fuelType, out m_FuelType); //throw an exeption if wrong parse
+            get
+            {
+                return m_FuelType;
+            }
+            set
+            {
+                if(m_FuelType != value)
+                {
+                    throw new ArgumentException("wrong fuel type");
+                }
+
+                m_FuelType = value;
+            }
+        }
+
+        public void AddEnergyToEngine(float i_energyToAdd, eFuelType i_fuelType)
+        {
+            FuelType = i_fuelType;
             base.AddEnergyToEngine(i_energyToAdd);
+        }
+
+        public override string ToString()
+        {
+            string fuelType = FuelType.ToString();
+            return $"Fuel Type: {fuelType} | Energy Amount Left: {EnergyAmountLeft} | Max Energy Possible Amount: {MaxEnergyPossibleAmount}";
         }
     }
 }

@@ -29,11 +29,21 @@ namespace Ex03.GarageLogic
 
     
 
-        public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft)
+        public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle)
         {
             Wheels.Capacity = k_WheelsNumber;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(base.ToString());
+            sb.AppendLine($"Number of Wheels: {Wheels.Count}");
+            sb.AppendLine($"Color: {Color}");
+            sb.AppendLine($"Number of Doors: {NumOfDoors}");
+
+            return sb.ToString();
+        }
         //public override string GetSpecialPropertiesNames()
         //{
         //    return Enum.GetNames(typeof(eCarSpecialProperties));

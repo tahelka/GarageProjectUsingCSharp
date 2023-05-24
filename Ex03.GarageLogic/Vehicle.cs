@@ -13,11 +13,10 @@ namespace Ex03.GarageLogic
         public List<Wheel> Wheels { get; set; }
         public Engine Engine { get; set; }
 
-        protected Vehicle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft)
+        protected Vehicle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
         {
             Model = i_ModelOfVehicle;
             PlateNumber = i_PlateNumberOfVehicle;
-            EnergyPrecentleft = i_EnergyPrecentLeft;
             Wheels = new List<Wheel>();
         }
 
@@ -44,6 +43,17 @@ namespace Ex03.GarageLogic
             return i_VehicleType.ToString().IndexOf("electric", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Model: {Model}");
+            sb.AppendLine($"Plate Number: {PlateNumber}");
+            sb.AppendLine($"Energy Percent Left: {EnergyPrecentleft}");
+            sb.AppendLine(Engine.ToString());
+            sb.AppendLine(Wheels.ToString());
+
+            return sb.ToString();
+        }
         //public abstract string GetSpecialPropertiesNames();
 
     }
