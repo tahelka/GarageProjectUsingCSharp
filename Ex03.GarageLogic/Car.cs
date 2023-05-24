@@ -38,7 +38,6 @@ namespace Ex03.GarageLogic
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(base.ToString());
-            sb.AppendLine($"Number of Wheels: {Wheels.Count}");
             sb.AppendLine($"Color: {Color}");
             sb.AppendLine($"Number of Doors: {NumOfDoors}");
 

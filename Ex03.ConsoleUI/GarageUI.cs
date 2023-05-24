@@ -61,12 +61,12 @@ namespace Ex03.ConsoleUI
                     chargeBattery(); //done
                     break;
                 case eActions.getVehicleByPlateNum:
-                    ShowVehicleState();
+                    ShowVehicleState(); //done
                     break;
                 case eActions.exit:
                     break;
-                    //default:
-                    //    throw new ArgumentOutOfRangeException();
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
