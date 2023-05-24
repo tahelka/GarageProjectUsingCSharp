@@ -50,7 +50,7 @@ namespace Ex03.GarageLogic
             sb.AppendLine($"Plate Number: {PlateNumber}");
             sb.AppendLine($"Energy Percent Left: {EnergyPrecentleft}");
             sb.AppendLine(Engine.ToString());
-            sb.AppendLine(Wheels.ToString());
+            sb.AppendLine(Wheels[0].ToString());
 
             return sb.ToString();
         }

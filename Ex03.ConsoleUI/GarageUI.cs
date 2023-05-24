@@ -76,7 +76,7 @@ namespace Ex03.ConsoleUI
             string plateNumber = GetLicenseNumberOfVehicle();
             if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle is not in garage");
             }
 
             Console.WriteLine(m_GarageManager.Garage.VehiclesInGarage[plateNumber].ToString());
@@ -265,12 +265,12 @@ namespace Ex03.ConsoleUI
 
         private void getEngineDetailsFromUser(Engine i_Engine)
         {
-            Console.WriteLine("Please enter engine's energy amount left");
-            float.TryParse(Console.ReadLine(), out float energyAmountLeft);
-            i_Engine.EnergyAmountLeft = energyAmountLeft;
             Console.WriteLine("Please enter engine's max energy possible amount");
             float.TryParse(Console.ReadLine(), out float maxEnergyPossibleAmount);
             i_Engine.MaxEnergyPossibleAmount = maxEnergyPossibleAmount;
+            Console.WriteLine("Please enter engine's energy amount left");
+            float.TryParse(Console.ReadLine(), out float energyAmountLeft);
+            i_Engine.EnergyAmountLeft = energyAmountLeft;
         }
 
         private void updateGarageVehicleStatusToBeingRepaired(string i_PlateNumberOfVehicle)

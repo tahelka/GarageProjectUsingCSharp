@@ -18,7 +18,7 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if(value > m_energyAmountLeft)
+                if(value > MaxEnergyPossibleAmount)
                 {
                     throw new ValueOutOfRangeException(value, 0, MaxEnergyPossibleAmount);
                 }
