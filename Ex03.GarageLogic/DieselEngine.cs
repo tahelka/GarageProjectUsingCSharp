@@ -15,7 +15,7 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        public eFuelType FuelType { get; set; }
+        private eFuelType m_fuelType;
         //{
         //    get { return FuelType; }
         //    set
@@ -35,16 +35,16 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_FuelType;
+                return m_fuelType;
             }
             set
             {
-                if(m_FuelType != value)
+                if(m_fuelType != value)
                 {
                     throw new ArgumentException("wrong fuel type");
                 }
 
-                m_FuelType = value;
+                m_fuelType = value;
             }
         }
 
