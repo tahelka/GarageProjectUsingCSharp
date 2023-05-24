@@ -13,11 +13,10 @@ namespace Ex03.GarageLogic
         public List<Wheel> Wheels { get; set; }
         public Engine Engine { get; set; }
 
-        protected Vehicle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft)
+        protected Vehicle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
         {
             Model = i_ModelOfVehicle;
             PlateNumber = i_PlateNumberOfVehicle;
-            EnergyPrecentleft = i_EnergyPrecentLeft;
             Wheels = new List<Wheel>();
         }
 

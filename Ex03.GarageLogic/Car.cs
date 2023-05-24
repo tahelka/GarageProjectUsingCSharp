@@ -9,7 +9,36 @@ namespace Ex03.GarageLogic
     {
         const int k_WheelsNumber = 4;
         public eColor Color { get; set; }
+        //{
+        //    get { return Color; }
+        //    set
+        //    {
+        //        if (Enum.IsDefined(typeof(eColor), value))
+        //        {
+        //            Color = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Invalid enum value");
+        //        }
+        //    }
+        //}
+
         public eNumOfDoors NumOfDoors { get; set; }
+        //{
+        //    get { return NumOfDoors; }
+        //    set
+        //    {
+        //        if (Enum.IsDefined(typeof(eNumOfDoors), value))
+        //        {
+        //            NumOfDoors = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Invalid enum value");
+        //        }
+        //    }
+        //}
 
         public enum eColor
         {
@@ -29,14 +58,9 @@ namespace Ex03.GarageLogic
 
     
 
-        public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft)
+        public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle)
         {
             Wheels.Capacity = k_WheelsNumber;
         }
-
-        //public override string GetSpecialPropertiesNames()
-        //{
-        //    return Enum.GetNames(typeof(eCarSpecialProperties));
-        //}
     }
 }

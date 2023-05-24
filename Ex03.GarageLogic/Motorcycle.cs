@@ -10,6 +10,20 @@ namespace Ex03.GarageLogic
         const int k_WheelsNumber = 2;
         public int EngineCapacity { get; set; }
         public eLicenseType LicenseType { get; set; }
+        //{
+        //    get { return LicenseType; }
+        //    set
+        //    {
+        //        if (Enum.IsDefined(typeof(eLicenseType), value))
+        //        {
+        //            LicenseType = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Invalid enum value");
+        //        }
+        //    }
+        //}
 
         public enum eLicenseType
         {
@@ -20,7 +34,7 @@ namespace Ex03.GarageLogic
         }
 
 
-        public Motorcycle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft)
+        public Motorcycle(string i_ModelOfVehicle, string i_PlateNumberOfVehicle) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle)
         {
             Wheels.Capacity = k_WheelsNumber;
         }

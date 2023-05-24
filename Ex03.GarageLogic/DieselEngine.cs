@@ -15,11 +15,29 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        private eFuelType m_FuelType;
+        public eFuelType FuelType { get; set; }
+        //{
+        //    get { return FuelType; }
+        //    set
+        //    {
+        //        if (Enum.IsDefined(typeof(eFuelType), value))
+        //        {
+        //            FuelType = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Invalid enum value");
+        //        }
+        //    }
+        //}
 
         public void AddEnergyToEngine(float i_energyToAdd, string i_fuelType)
         {
-            Enum.TryParse(i_fuelType, out m_FuelType); //throw an exeption if wrong parse
+            Enum.TryParse(i_fuelType, out eFuelType enumFuelType);
+            if(FuelType != enumFuelType)
+            {
+                throw new ArgumentException("Wrong fuel type");
+            }
             base.AddEnergyToEngine(i_energyToAdd);
         }
     }

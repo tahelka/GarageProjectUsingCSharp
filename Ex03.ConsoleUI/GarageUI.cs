@@ -205,6 +205,7 @@ namespace Ex03.ConsoleUI
 
         private void updateEnergyPrecentleft(Vehicle i_Vehicle)
         {
+            // if precent >1 we need to add exception
             i_Vehicle.EnergyPrecentleft = (float)Math.Round(i_Vehicle.Engine.EnergyAmountLeft / i_Vehicle.Engine.MaxEnergyPossibleAmount, 2);            
         }
 
@@ -216,11 +217,6 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Please enter engine's max energy possible amount");
             float.TryParse(Console.ReadLine(), out float maxEnergyPossibleAmount);
             i_Engine.MaxEnergyPossibleAmount = maxEnergyPossibleAmount;
-        }
-
-        private void updateEnergyPrecentleft()
-        {
-
         }
 
         private void updateGarageVehicleStatusToBeingRepaired(string i_PlateNumberOfVehicle)
@@ -282,29 +278,14 @@ namespace Ex03.ConsoleUI
             setMethod.Invoke(i_obj, new object[] { valueToSet });
         }
 
-        public void PrintEnumOptions<T>()
-        {
-            if (!typeof(T).IsEnum)
-            {
-                Console.WriteLine("Invalid type. Please provide an enum type.");
-                return;
-            }
 
-            Console.Write("Choose one of the followings (case sensitive): ");
-
-            T[] enumValues = (T[])Enum.GetValues(typeof(T));
-            string joinedOptions = string.Join(", ", enumValues);
-            Console.WriteLine(joinedOptions);
-
-        }
         
         public void askUserToEnterPropertyValue(object i_Obj, string i_DataMember)
         {
             if (!string.IsNullOrEmpty(i_DataMember))
             {
                 Console.WriteLine(createMsgForUserToEnterCurrentProperty(i_DataMember));
-                checkIfEnumAndAskUserForSpecificValues(i_Obj, i_DataMember);
-                //checkIfBoolAndAskUserForSpecificValues(i_Obj, i_DataMember);
+                checkIfEnumOrBoolAndAskUserForSpecificValues(i_Obj, i_DataMember);
             }
         }
 
@@ -334,7 +315,7 @@ namespace Ex03.ConsoleUI
             return msgForUserToEnterCurrentDataMember;
         }
 
-        public void checkIfEnumAndAskUserForSpecificValues(object i_Obj, string i_DataMember)
+        public void checkIfEnumOrBoolAndAskUserForSpecificValues(object i_Obj, string i_DataMember)
         {
             Type type = i_Obj.GetType();
             PropertyInfo dataMemberInfo = type.GetProperty(i_DataMember);
@@ -342,7 +323,16 @@ namespace Ex03.ConsoleUI
             if (dataMemberInfo.PropertyType.IsEnum)
             {
                 AskUserToEnterSpecificEnumValues(i_Obj, dataMemberInfo);
+            } 
+            else if(dataMemberInfo.PropertyType == typeof(bool))
+            {
+                askUserForSpecificBoolValues();
             }
+        }
+
+        private void askUserForSpecificBoolValues()
+        {
+            Console.WriteLine("Type true/false (case sensitive): ");
         }
 
         public void AskUserToEnterSpecificEnumValues(object i_Obj, PropertyInfo i_DataMemberInfo)
@@ -351,6 +341,22 @@ namespace Ex03.ConsoleUI
             object instance = Activator.CreateInstance(this.GetType());
             MethodInfo printEnumOptionsMethod = instance.GetType().GetMethod("PrintEnumOptions").MakeGenericMethod(enumType);
             printEnumOptionsMethod.Invoke(instance, null);
+        }
+
+        public void PrintEnumOptions<T>()
+        {
+            if (!typeof(T).IsEnum)
+            {
+                Console.WriteLine("Invalid type. Please provide an enum type.");
+                return;
+            }
+
+            Console.Write("Choose one of the followings (case sensitive): ");
+
+            T[] enumValues = (T[])Enum.GetValues(typeof(T));
+            string joinedOptions = string.Join(", ", enumValues);
+            Console.WriteLine(joinedOptions);
+
         }
 
         public List<string> GetDeclaredOnlyPropertiesOfObjectWhichHaveSetters(object i_Obj)
@@ -474,29 +480,29 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public eNumOfDoors ChooseNumOfDoors()
-        {
-            Console.WriteLine("choose number of doors from the list");
-            foreach (eNumOfDoors value in Enum.GetValues(typeof(eNumOfDoors)))
-            {
-                Console.WriteLine(value.ToString());
-            }
+        //public eNumOfDoors ChooseNumOfDoors()
+        //{
+        //    Console.WriteLine("choose number of doors from the list");
+        //    foreach (eNumOfDoors value in Enum.GetValues(typeof(eNumOfDoors)))
+        //    {
+        //        Console.WriteLine(value.ToString());
+        //    }
 
-            Enum.TryParse(Console.ReadLine(), out eNumOfDoors res);
-            return res;
-        }
+        //    Enum.TryParse(Console.ReadLine(), out eNumOfDoors res);
+        //    return res;
+        //}
 
-        public eColor ChooseCarColor()
-        {
-            Console.WriteLine("choose the color of the car from the list");
-            foreach (eColor value in Enum.GetValues(typeof(eColor)))
-            {
-                Console.WriteLine(value.ToString());
-            }
+        //public eColor ChooseCarColor()
+        //{
+        //    Console.WriteLine("choose the color of the car from the list");
+        //    foreach (eColor value in Enum.GetValues(typeof(eColor)))
+        //    {
+        //        Console.WriteLine(value.ToString());
+        //    }
 
-            Enum.TryParse(Console.ReadLine(), out eColor res);
-            return res;
-        }
+        //    Enum.TryParse(Console.ReadLine(), out eColor res);
+        //    return res;
+        //}
 
     }
 }

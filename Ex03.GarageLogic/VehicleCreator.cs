@@ -11,16 +11,9 @@ namespace Ex03.GarageLogic
         {
             ElectricCar = 1,
             DieselCar,
-            Truck,
+            DieselTruck,
             ElectricMotorcycle,
             DieselMotorcycle
-        }
-
-        List<string> m_VehicleTypesSupportedInSystem;
-
-        public VehicleCreator()
-        {
-            m_VehicleTypesSupportedInSystem = new List<string>() { "Car", "Motorcycle", "Truck"};
         }
 
         public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
@@ -38,7 +31,7 @@ namespace Ex03.GarageLogic
                 case eSupportedVehicleTypes.DieselMotorcycle:
                     res = new Motorcycle(i_ModelOfVehicle, i_PlateNumberOfVehicle);
                     break;
-                case eSupportedVehicleTypes.Truck:
+                case eSupportedVehicleTypes.DieselTruck:
                     res = new Truck(i_ModelOfVehicle, i_PlateNumberOfVehicle);
                     break;
                 default:
