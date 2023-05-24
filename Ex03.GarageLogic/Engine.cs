@@ -8,10 +8,28 @@ namespace Ex03.GarageLogic
     public abstract class Engine
     {
         public bool isElectricEngine{ get; set;  }
-        public float EnergyAmountLeft { get; set; }
+
+        private float m_energyAmountLeft;
+        public float EnergyAmountLeft
+        {
+            get
+            {
+                return m_energyAmountLeft;
+            }
+            set
+            {
+                if(value > m_energyAmountLeft)
+                {
+                    throw new ValueOutOfRangeException(value, 0, MaxEnergyPossibleAmount);
+                }
+
+                m_energyAmountLeft = value;
+            }
+        }
+
         public float MaxEnergyPossibleAmount { get; set; }
 
-        public Engine()
+        protected Engine()
         {
             isElectricEngine = false;
         }

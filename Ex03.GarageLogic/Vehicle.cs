@@ -43,6 +43,17 @@ namespace Ex03.GarageLogic
             return i_VehicleType.ToString().IndexOf("electric", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Model: {Model}");
+            sb.AppendLine($"Plate Number: {PlateNumber}");
+            sb.AppendLine($"Energy Percent Left: {EnergyPrecentleft}");
+            sb.AppendLine(Engine.ToString());
+            sb.AppendLine(Wheels.ToString());
+
+            return sb.ToString();
+        }
         //public abstract string GetSpecialPropertiesNames();
 
     }

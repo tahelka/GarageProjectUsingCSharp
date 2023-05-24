@@ -31,14 +31,33 @@ namespace Ex03.GarageLogic
         //    }
         //}
 
-        public void AddEnergyToEngine(float i_energyToAdd, string i_fuelType)
+        public eFuelType FuelType
         {
-            Enum.TryParse(i_fuelType, out eFuelType enumFuelType);
-            if(FuelType != enumFuelType)
+            get
             {
-                throw new ArgumentException("Wrong fuel type");
+                return m_FuelType;
             }
+            set
+            {
+                if(m_FuelType != value)
+                {
+                    throw new ArgumentException("wrong fuel type");
+                }
+
+                m_FuelType = value;
+            }
+        }
+
+        public void AddEnergyToEngine(float i_energyToAdd, eFuelType i_fuelType)
+        {
+            FuelType = i_fuelType;
             base.AddEnergyToEngine(i_energyToAdd);
+        }
+
+        public override string ToString()
+        {
+            string fuelType = FuelType.ToString();
+            return $"Fuel Type: {fuelType} | Energy Amount Left: {EnergyAmountLeft} | Max Energy Possible Amount: {MaxEnergyPossibleAmount}";
         }
     }
 }

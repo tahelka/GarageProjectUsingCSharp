@@ -39,7 +39,15 @@ namespace Ex03.GarageLogic
             Wheels.Capacity = k_WheelsNumber;
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(base.ToString());
+            sb.AppendLine($"Number of Wheels: {Wheels.Count}");
+            sb.AppendLine($"Engine Capacity: {EngineCapacity}");
+            sb.AppendLine($"License Type: {LicenseType}");
 
-
+            return sb.ToString();
+        }
     }
 }

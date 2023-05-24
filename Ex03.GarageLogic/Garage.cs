@@ -25,6 +25,16 @@ namespace Ex03.GarageLogic
             {
                 VehicleStatus = eVehicleStatus.BeingRepaired;
             }
+
+            public override string ToString()
+            {
+                return $@"
+Owner Name: {OwnerName}
+Owner Phone Number: {OwnerPhoneNumber}
+Vehicle Status: {VehicleStatus}
+{Vehicle.ToString()}";
+
+            }
         }
         public Dictionary<string, GaragedVehicle> VehiclesInGarage { get; set; }
 

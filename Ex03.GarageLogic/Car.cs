@@ -62,5 +62,19 @@ namespace Ex03.GarageLogic
         {
             Wheels.Capacity = k_WheelsNumber;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(base.ToString());
+            sb.AppendLine($"Color: {Color}");
+            sb.AppendLine($"Number of Doors: {NumOfDoors}");
+
+            return sb.ToString();
+        }
+        //public override string GetSpecialPropertiesNames()
+        //{
+        //    return Enum.GetNames(typeof(eCarSpecialProperties));
+        //}
     }
 }

@@ -15,5 +15,17 @@ namespace Ex03.GarageLogic
         {
             Wheels.Capacity = k_WheelsNumber;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(base.ToString());
+            sb.AppendLine($"Number of Wheels: {Wheels.Count}");
+            sb.AppendLine($"Does Contain Dangerous Materials: {DoesContainDangerousMaterials}");
+            sb.AppendLine($"Payload Capacity: {PayloadCapacity}");
+
+            return sb.ToString();
+        }
+
     }
 }

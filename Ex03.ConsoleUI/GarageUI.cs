@@ -55,20 +55,74 @@ namespace Ex03.ConsoleUI
                     inflateTiersToMax(); //done
                     break;
                 case eActions.fillFuelTank:
-
+                    fillFuelType(); //done
+                    break;
                 case eActions.chargevehicleBattery:
-
+                    chargeBattery(); //done
+                    break;
                 case eActions.getVehicleByPlateNum:
-
+                    ShowVehicleState(); //done
+                    break;
                 case eActions.exit:
                     break;
-                    //default:
-                    //    throw new ArgumentOutOfRangeException();
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void ShowVehicleState()
+        {
+            Console.WriteLine("enter the vehicle License number");
+            string plateNumber = GetLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            {
+                throw new ArgumentException();
+            }
+
+            Console.WriteLine(m_GarageManager.Garage.VehiclesInGarage[plateNumber].ToString());
+        }
+
+        private void chargeBattery()
+        {
+            Console.WriteLine("enter the vehicle License number");
+            string plateNumber = GetLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            {
+                throw new ArgumentException();
+            }
+
+            Console.WriteLine("enter the number of minutes to charge");
+            int.TryParse(Console.ReadLine(), out int numOfMinutesToAdd);
+
+            ElectricEngine dieselEngine = m_GarageManager.Garage.VehiclesInGarage[plateNumber].Vehicle.Engine as ElectricEngine;
+            dieselEngine.AddEnergyToEngine(numOfMinutesToAdd);
+        }
+
+        private void fillFuelType()
+        {
+            Console.WriteLine("enter the vehicle License number");
+            string plateNumber = GetLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            {
+                throw new ArgumentException();
+            }
+
+            Console.WriteLine("enter the vehicle fuel type");
+            PrintEnumOptions<DieselEngine.eFuelType>();
+            Enum.TryParse(Console.ReadLine(), out DieselEngine.eFuelType fuelType);
+            Console.WriteLine("how much fuel would you like to add?");
+            float.TryParse(Console.ReadLine(), out float fuelToAdd);
+
+            DieselEngine dieselEngine = m_GarageManager.Garage.VehiclesInGarage[plateNumber].Vehicle.Engine as DieselEngine;
+            dieselEngine.AddEnergyToEngine(fuelToAdd, fuelType);
+
+
+
         }
 
         private void inflateTiersToMax()
         {
+            Console.WriteLine("enter the vehicle License number");
             string plateNumber = GetLicenseNumberOfVehicle();
             if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
             {
