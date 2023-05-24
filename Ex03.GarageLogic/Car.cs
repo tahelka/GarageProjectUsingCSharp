@@ -8,6 +8,9 @@ namespace Ex03.GarageLogic
     public class Car : Vehicle
     {
         const int k_WheelsNumber = 4;
+        public eColor Color { get; set; }
+        public eNumOfDoors NumOfDoors { get; set; }
+
         public enum eColor
         {
             White,
@@ -24,12 +27,16 @@ namespace Ex03.GarageLogic
             Five = 5
         }
 
-        public eColor m_Color;
-        public eNumOfDoors m_NumOfDoors;
+    
 
         public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft)
         {
-            m_Wheels.Capacity = k_WheelsNumber;
+            Wheels.Capacity = k_WheelsNumber;
         }
+
+        //public override string GetSpecialPropertiesNames()
+        //{
+        //    return Enum.GetNames(typeof(eCarSpecialProperties));
+        //}
     }
 }

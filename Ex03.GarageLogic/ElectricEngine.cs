@@ -7,7 +7,6 @@ namespace Ex03.GarageLogic
 {
     public class ElectricEngine : Engine
     {
-        private float m_HouersRunTimeLeft;
-        private float m_MaxHouersRunTime;
+
     }
 }

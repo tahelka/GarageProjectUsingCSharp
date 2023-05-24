@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
     {
         public bool isElectricEngine{ get; set;  }
         public float EnergyAmountLeft { get; set; }
-        public float MaxEnergyAmountPossible { get; set; }
+        public float MaxEnergyPossibleAmount { get; set; }
 
         public Engine()
         {
@@ -19,5 +19,7 @@ namespace Ex03.GarageLogic
         {
             EnergyAmountLeft = i_EnergyToAdd;
         }
+
+
     }
 }

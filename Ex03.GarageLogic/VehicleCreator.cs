@@ -23,7 +23,7 @@ namespace Ex03.GarageLogic
             m_VehicleTypesSupportedInSystem = new List<string>() { "Car", "Motorcycle", "Truck"};
         }
 
-        public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle, float i_EnergyPrecentLeft)
+        public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
         {
             Vehicle res;
             bool isElectricCar = true;
@@ -32,14 +32,14 @@ namespace Ex03.GarageLogic
             {
                 case eSupportedVehicleTypes.ElectricCar:
                 case eSupportedVehicleTypes.DieselCar:
-                    res = new Car(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
+                    res = new Car(i_ModelOfVehicle, i_PlateNumberOfVehicle);
                     break;                  
                 case eSupportedVehicleTypes.ElectricMotorcycle:
                 case eSupportedVehicleTypes.DieselMotorcycle:
-                    res = new Motorcycle(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
+                    res = new Motorcycle(i_ModelOfVehicle, i_PlateNumberOfVehicle);
                     break;
                 case eSupportedVehicleTypes.Truck:
-                    res = new Truck(i_ModelOfVehicle, i_PlateNumberOfVehicle, i_EnergyPrecentLeft);
+                    res = new Truck(i_ModelOfVehicle, i_PlateNumberOfVehicle);
                     break;
                 default:
                     throw new ArgumentException();

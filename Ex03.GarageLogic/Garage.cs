@@ -20,6 +20,11 @@ namespace Ex03.GarageLogic
             public string OwnerName { get; set; }
             public string OwnerPhoneNumber { get; set; }
             public eVehicleStatus VehicleStatus { get; set; }
+
+            public GaragedVehicle()
+            {
+                VehicleStatus = eVehicleStatus.BeingRepaired;
+            }
         }
         public Dictionary<string, GaragedVehicle> VehiclesInGarage { get; set; }
 
@@ -34,7 +39,7 @@ namespace Ex03.GarageLogic
 
         public void Add(GaragedVehicle i_VehicleToAdd)
         {
-            VehiclesInGarage[i_VehicleToAdd.Vehicle.m_PlateNumber] = i_VehicleToAdd;
+            VehiclesInGarage[i_VehicleToAdd.Vehicle.PlateNumber] = i_VehicleToAdd;
         }
     }
 }

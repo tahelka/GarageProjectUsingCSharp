@@ -76,7 +76,7 @@ namespace Ex03.GarageLogic
             // You can customize this method based on the properties and behavior of your Vehicle class
             Console.WriteLine("Enter the vehicle details:");
             Console.WriteLine("Fuel amount: ");
-            vehicle.m_EnergyPrecentleft = int.Parse(Console.ReadLine());
+            vehicle.EnergyPrecentleft = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Tire pressure (enter the same value for all tires): ");
             int tirePressure = int.Parse(Console.ReadLine());
@@ -95,7 +95,7 @@ namespace Ex03.GarageLogic
             {
                 if (vehicle.VehicleStatus == i_status || vehicle.VehicleStatus == GaragedVehicle.eVehicleStatus.All)
                 {
-                    plateNumbers.Add(vehicle.Vehicle.m_PlateNumber);
+                    plateNumbers.Add(vehicle.Vehicle.PlateNumber);
                 }
             }
 
@@ -110,7 +110,7 @@ namespace Ex03.GarageLogic
         public void InflateTiersToMax(string i_PlateNumber)
         {
             Vehicle vehicle = Garage.VehiclesInGarage[i_PlateNumber].Vehicle;
-            foreach(Wheel wheel in vehicle.m_Wheels)
+            foreach(Wheel wheel in vehicle.Wheels)
             {
                 wheel.WheelInflateToMax();
             }
