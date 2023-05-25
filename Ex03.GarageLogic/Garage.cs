@@ -1,74 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
     public class Garage
     {
-        public class GaragedVehicle
-        {
-            public enum eVehicleStatus
-            {
-                BeingRepaired,
-                Repaired,
-                PaymentCompleted,
-                All
-            }
-            public Vehicle Vehicle { get; set; }
-            public string OwnerName { get; set; }
-            private string m_OwnerPhoneNumber;
-            public eVehicleStatus VehicleStatus { get; set; }
-
-            public string OwnerPhoneNumber
-            {
-                get
-                {
-                    return m_OwnerPhoneNumber;
-                }
-                set
-                {
-                    foreach (char charInStr in value)
-                    {
-                        if (!char.IsDigit(charInStr))
-                        {
-                            throw new FormatException();
-                        }
-                    }
-
-                    m_OwnerPhoneNumber = value;
-                }
-            }
-
-            public GaragedVehicle()
-            {
-                VehicleStatus = eVehicleStatus.BeingRepaired;
-            }
-
-            public override string ToString()
-            {
-                return $@"
-Owner Name: {OwnerName}
-Owner Phone Number: {OwnerPhoneNumber}
-Vehicle Status: {VehicleStatus}
-{Vehicle.ToString()}";
-
-            }
-        }
-        public Dictionary<string, GaragedVehicle> VehiclesInGarage { get; set; }
+        private readonly Dictionary<string, GaragedVehicle> r_VehiclesInGarage;
+ 
 
         public Garage()
         {
-            VehiclesInGarage = new Dictionary<string, GaragedVehicle>();
+            r_VehiclesInGarage = new Dictionary<string, GaragedVehicle>();
         }
 
         public bool IsVehicleInGarage(string i_PlateNumber)
         {
-            return VehiclesInGarage.ContainsKey(i_PlateNumber);
+            return r_VehiclesInGarage.ContainsKey(i_PlateNumber);
         }
 
-        //public void Add(GaragedVehicle i_VehicleToAdd)
-        //{
-        //    VehiclesInGarage[i_VehicleToAdd.Vehicle.PlateNumber] = i_VehicleToAdd;
-        //}
+        public GaragedVehicle GetGaragedVehicle(string i_PlateNumber)
+        {
+            return r_VehiclesInGarage[i_PlateNumber];
+        }
+
+        public void AddVehicleToGarage(GaragedVehicle i_GaragedVehicle)
+        {
+            r_VehiclesInGarage.Add(i_GaragedVehicle.Vehicle.PlateNumber,i_GaragedVehicle);
+        }
+
+        public List<string> GetVehiclesPlateNumbersByStatus(GaragedVehicle.eVehicleStatus i_status)
+        {
+            List<string> plateNumbers = new List<string>();
+            foreach (GaragedVehicle vehicle in r_VehiclesInGarage.Values)
+            {
+                if (vehicle.VehicleStatus == i_status)
+                {
+                    plateNumbers.Add(vehicle.Vehicle.PlateNumber);
+                }
+            }
+
+            return plateNumbers;
+        }
+
+        public void SetStatusOfAVehicle(string i_PlateNumber, GaragedVehicle.eVehicleStatus i_NewStatus)
+        {
+            r_VehiclesInGarage[i_PlateNumber].VehicleStatus = i_NewStatus;
+            //Garage.GetGaragedVehicle(i_PlateNumber).VehicleStatus = i_NewStatus;
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace Ex03.GarageLogic
 {
     public class Motorcycle : Vehicle
     {
-        const int k_WheelsNumber = 2;
+        private const int k_WheelsNumber = 2;
         public int EngineCapacity { get; set; }
         public eLicenseType LicenseType { get; set; }
 

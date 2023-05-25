@@ -10,10 +10,12 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            string puralOfEnergyAmountLeft = EnergyAmountLeft == 1 ? "" : "s";
-            string puralOfMaxEnergyPossibleAmount = MaxEnergyPossibleAmount == 1 ? "" : "s";
+            string pluralOfEnergyAmountLeft = EnergyAmountLeft == 1 ? "" : "s";
+            string pluralOfMaxEnergyPossibleAmount = MaxEnergyPossibleAmount == 1 ? "" : "s";
 
-            return $"Electric Engine | Energy Amount Left: {EnergyAmountLeft} hour{puralOfEnergyAmountLeft} | Max Energy Possible Amount: {MaxEnergyPossibleAmount} hour{puralOfMaxEnergyPossibleAmount}";
+            return $@"Electric Engine 
+Energy Amount Left: {EnergyAmountLeft} hour{pluralOfEnergyAmountLeft}
+Max Energy Possible Amount: {MaxEnergyPossibleAmount} hour{pluralOfMaxEnergyPossibleAmount}";
         }
     }
 }

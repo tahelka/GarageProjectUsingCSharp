@@ -13,11 +13,11 @@ namespace Ex03.GarageLogic
             DieselMotorcycle
         }
 
-        public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
+        public Vehicle BuildVehicleByType(eSupportedVehicleTypes i_VehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
         {
             Vehicle res;
             
-            switch (i_vehicleType)
+            switch (i_VehicleType)
             {
                 case eSupportedVehicleTypes.ElectricCar:
                 case eSupportedVehicleTypes.DieselCar:
@@ -35,6 +35,16 @@ namespace Ex03.GarageLogic
             }
  
             return res;
+        }
+
+        public void PrintAllSupportedVehicleTypes()
+        {
+            foreach (eSupportedVehicleTypes action in Enum.GetValues(typeof(eSupportedVehicleTypes)))
+            {
+                int value = (int)action;
+                string optionName = action.ToString();
+                Console.WriteLine($"{value}. {optionName}");
+            }
         }
     }
 }

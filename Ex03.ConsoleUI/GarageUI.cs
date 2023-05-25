@@ -3,170 +3,202 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using VehicleCreator = Ex03.GarageLogic.VehicleCreator;
-using GarageManager = Ex03.GarageLogic.GarageManager;
 using Vehicle = Ex03.GarageLogic.Vehicle;
 using  Ex03.GarageLogic;
-using static Ex03.GarageLogic.Garage;
 
 namespace Ex03.ConsoleUI
 {
     public class GarageUI
     {
-        public bool m_IsGarageInAction = true;
-        VehicleCreator m_VehicleCreator;
-        GarageManager m_GarageManager;
+        public bool IsGarageInAction { get; set; }
+        private readonly VehicleCreator r_VehicleCreator;
+        private readonly Garage r_Garage;
 
         public GarageUI()
         {
-            m_VehicleCreator = new VehicleCreator();
-            m_GarageManager = new GarageManager();
+            r_VehicleCreator = new VehicleCreator();
+            r_Garage = new Garage();
+            IsGarageInAction = true;
         }
 
         public enum eActions
         {
-            enterNewVechicle = 1,
-            showVehicleInGarage,
-            changeVeihcleStatus,
-            inflateTiersToMax,
-            fillFuelTank,
-            chargevehicleBattery,
-            getVehicleByPlateNum,
-            exit
+            EnterNewVehicle = 1,
+            ShowVehicleInGarage,
+            ChangeVehicleStatus,
+            InflateTiersToMax,
+            FillFuelTank,
+            ChargeVehicleBattery,
+            GetVehicleByPlateNum,
+            Exit
         }
 
         public void ChooseAction()
         {
             eActions action = getActionNumber();
-            switch (action)
+            try
             {
-                case eActions.enterNewVechicle:
-                    EnterNewVehicleToGarage();
-                    break;
-                case eActions.showVehicleInGarage: //done
-                    ShowVehiclesInGarage();
-                    break;
-                case eActions.changeVeihcleStatus: //done
-                    ChangeVeihcleStatus();
-                    break;
-                case eActions.inflateTiersToMax:
-                    inflateTiersToMax(); //done
-                    break;
-                case eActions.fillFuelTank:
-                    fillFuelType(); //done
-                    break;
-                case eActions.chargevehicleBattery:
-                    chargeBattery(); //done
-                    break;
-                case eActions.getVehicleByPlateNum:
-                    ShowVehicleState(); //done
-                    break;
-                case eActions.exit:
-                    m_IsGarageInAction = false;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch(action)
+                {
+                    case eActions.EnterNewVehicle:
+                        enterNewVehicleToGarage();
+                        break;
+                    case eActions.ShowVehicleInGarage:
+                        showVehiclesInGarage();
+                        break;
+                    case eActions.ChangeVehicleStatus:
+                        changeVeihcleStatus();
+                        break;
+                    case eActions.InflateTiersToMax:
+                        inflateTiersToMax();
+                        break;
+                    case eActions.FillFuelTank:
+                        fillFuel();
+                        break;
+                    case eActions.ChargeVehicleBattery:
+                        chargeBattery();
+                        break;
+                    case eActions.GetVehicleByPlateNum:
+                        showVehicleState();
+                        break;
+                    case eActions.Exit:
+                        IsGarageInAction = false;
+                        break;
+                    default:
+                        throw new ValueOutOfRangeException(
+                            (float)action,
+                            (float)eActions.EnterNewVehicle,
+                            (float)eActions.Exit);
+                }
             }
+            catch(ValueOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch(FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch(ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
-        private void ShowVehicleState()
+        private void showVehicleState()
         {
-            Console.WriteLine("enter the vehicle License number");
             string plateNumber = getLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
+            if (!r_Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException("Vehicle is not in garage");
             }
-
-            Console.WriteLine(m_GarageManager.Garage.VehiclesInGarage[plateNumber].ToString());
+            Console.WriteLine("========================================");
+            Console.WriteLine(r_Garage.GetGaragedVehicle(plateNumber).ToString());
+            Console.WriteLine("========================================");
         }
 
         private void chargeBattery()
         {
-            Console.WriteLine("enter the vehicle License number");
             string plateNumber = getLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
+            if (!r_Garage.IsVehicleInGarage(plateNumber))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle is not in garage");
+            }
+
+            Vehicle vehicle = r_Garage.GetGaragedVehicle(plateNumber).Vehicle;
+            if (!(vehicle.Engine is ElectricEngine))
+            {
+                throw new ArgumentException("this vehicle energy source is not electricity");
             }
 
             Console.WriteLine("enter the number of minutes to charge");
             int.TryParse(Console.ReadLine(), out int numOfMinutesToAdd);
-
-            ElectricEngine dieselEngine = m_GarageManager.Garage.VehiclesInGarage[plateNumber].Vehicle.Engine as ElectricEngine;
-            dieselEngine.AddEnergyToEngine(numOfMinutesToAdd);
+            ElectricEngine electricEngine = vehicle.Engine as ElectricEngine;
+            electricEngine.AddEnergyToEngine(numOfMinutesToAdd);
+            vehicle.UpdateEnergyPercentLeft();
         }
 
-        private void fillFuelType()
+        private void fillFuel()
         {
-            Console.WriteLine("enter the vehicle License number");
             string plateNumber = getLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
+            if (!r_Garage.IsVehicleInGarage(plateNumber))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle is not in garage");
+            }
+
+            Vehicle vehicle = r_Garage.GetGaragedVehicle(plateNumber).Vehicle;
+            if(!(vehicle.Engine is DieselEngine))
+            {
+                throw new ArgumentException("this vehicle doesn't run on fuel");
             }
 
             Console.WriteLine("enter the vehicle fuel type");
             PrintEnumOptions<DieselEngine.eFuelType>();
-            Enum.TryParse(Console.ReadLine(), out DieselEngine.eFuelType fuelType);
+            string fuelTypeAsString = Console.ReadLine();
+            checkValidationOfEnumValue(typeof(DieselEngine.eFuelType), fuelTypeAsString);
+            Enum.TryParse(fuelTypeAsString, out DieselEngine.eFuelType fuelType);
             Console.WriteLine("how much fuel would you like to add?");
-            float.TryParse(Console.ReadLine(), out float fuelToAdd);
+            if(!float.TryParse(Console.ReadLine(), out float fuelToAdd))
+            {
+                throw new FormatException("Invalid input");
+            }
 
-            DieselEngine dieselEngine = m_GarageManager.Garage.VehiclesInGarage[plateNumber].Vehicle.Engine as DieselEngine;
+            DieselEngine dieselEngine = vehicle.Engine as DieselEngine;
             dieselEngine.AddEnergyToEngine(fuelToAdd, fuelType);
-
-
-
+            vehicle.UpdateEnergyPercentLeft();
         }
 
         private void inflateTiersToMax()
         {
-            Console.WriteLine("enter the vehicle License number");
             string plateNumber = getLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
+            if (!r_Garage.IsVehicleInGarage(plateNumber))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle is not in garage");
             }
 
-            m_GarageManager.InflateTiersToMax(plateNumber);
+            r_Garage.GetGaragedVehicle(plateNumber).Vehicle.InflateTiersToMax();
         }
 
-        private void ChangeVeihcleStatus()
+        private void changeVeihcleStatus()
         {
             string plateNumber = getLicenseNumberOfVehicle();
-            if(!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
+            if(!r_Garage.IsVehicleInGarage(plateNumber))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle is not in garage");
             }
 
             GaragedVehicle.eVehicleStatus newStatus = ChooseStatusOfVehicle();
-            m_GarageManager.SetStatusOfAVehicle(plateNumber, newStatus);
+            r_Garage.SetStatusOfAVehicle(plateNumber, newStatus);
         }
 
         private GaragedVehicle.eVehicleStatus ChooseStatusOfVehicle()
         {
-            GaragedVehicle.eVehicleStatus status;
             Console.WriteLine("Please choose one of the following options:");
-            printStatusMenu();
-            Enum.TryParse(Console.ReadLine(), out status);
+            GaragedVehicle.PrintStatusMenu();
+            if (!Enum.TryParse(Console.ReadLine(), out GaragedVehicle.eVehicleStatus status))
+            {
+                throw new FormatException($"{status} is not a valid option");
+            }
 
             return status;
         }
 
-        private void ShowVehiclesInGarage()
+        private void showVehiclesInGarage()
         {
             GaragedVehicle.eVehicleStatus filter = ChooseStatusOfVehicle();
-            PrintVehiclesByFilter(filter);
+            printVehiclesByFilter(filter);
         }
 
-        private void PrintVehiclesByFilter(GaragedVehicle.eVehicleStatus i_Filter)
+        private void printVehiclesByFilter(GaragedVehicle.eVehicleStatus i_Filter)
         {
             Console.WriteLine(
-                i_Filter != GaragedVehicle.eVehicleStatus.All
+                Enum.IsDefined(typeof(GaragedVehicle.eVehicleStatus), i_Filter)
                     ? $"All vehicles in the garage in status {i_Filter}:"
                     : "All vehicles in the garage:");
 
-            List<string> vehiclesList = m_GarageManager.GetVehiclesPlateNumbersByStatus(i_Filter);
-            if(vehiclesList != null)
+            List<string> vehiclesList = r_Garage.GetVehiclesPlateNumbersByStatus(i_Filter);
+            if(vehiclesList.Count > 0)
             {
                 foreach(string plateNumber in vehiclesList)
                 {
@@ -179,32 +211,11 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        private void printStatusMenu()
-        {
-            foreach (Garage.GaragedVehicle.eVehicleStatus status in Enum.GetValues(typeof(Garage.GaragedVehicle.eVehicleStatus)))
-            {
-                int value = (int)status;
-                string optionName = status.ToString();
-                Console.WriteLine($"{value}. {optionName}");
-            }
-        }
-
         private eActions getActionNumber()
         {
-            eActions chosenActionByUser = 0;
-
-            try
-            {
-                Console.WriteLine("Please choose one of the following options:");
-                printActionsMenu();
-                Enum.TryParse(Console.ReadLine(), out chosenActionByUser);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("out of range");
-                getActionNumber();
-            }
-
+            Console.WriteLine("Please choose one of the following options:");
+            printActionsMenu();
+            Enum.TryParse(Console.ReadLine(), out eActions chosenActionByUser);
             return chosenActionByUser;
         }
 
@@ -221,19 +232,20 @@ namespace Ex03.ConsoleUI
 8. exit");
         }
 
-        private void EnterNewVehicleToGarage()
+        private void enterNewVehicleToGarage()
         {         
             string plateNumberOfVehicle = getLicenseNumberOfVehicle();
-            bool isVehicleInGarage = m_GarageManager.Garage.IsVehicleInGarage(plateNumberOfVehicle);
+            bool isVehicleInGarage = r_Garage.IsVehicleInGarage(plateNumberOfVehicle);
 
             if (isVehicleInGarage)
             {
-                updateGarageVehicleStatusToBeingRepaired(plateNumberOfVehicle);            }
+                updateGarageVehicleStatusToBeingRepaired(plateNumberOfVehicle);
+            }
             else
             {
                 VehicleCreator.eSupportedVehicleTypes vehicleType = getVehicleTypeFromUser();
                 Vehicle newVehicleToEnterToGarage = createVehicleWithBasicDataMembersFromUser(vehicleType, plateNumberOfVehicle);
-                if(newVehicleToEnterToGarage.isElectric(vehicleType))
+                if(newVehicleToEnterToGarage.IsElectric(vehicleType))
                 {
                     newVehicleToEnterToGarage.Engine = new ElectricEngine();
                 }
@@ -242,6 +254,7 @@ namespace Ex03.ConsoleUI
                     newVehicleToEnterToGarage.Engine = new DieselEngine();
                     getDieselEngineDetails((DieselEngine)newVehicleToEnterToGarage.Engine);
                 }
+
                 updateEngineDetails(newVehicleToEnterToGarage);
                 getWheelsDetailsFromUser(newVehicleToEnterToGarage);
                 getDeclaredOnlyPropertiesFromUser(newVehicleToEnterToGarage);
@@ -253,22 +266,15 @@ namespace Ex03.ConsoleUI
         {
             Console.WriteLine("Please enter vehicle's fuel type");
             askUserToEnterSpecificEnumValues(typeof(DieselEngine).GetProperty("FuelType"));
-
-            // OR THIS WITH FORMAT EXCEPTION
             string enumValueFromUser = Console.ReadLine();
             checkValidationOfEnumValue(typeof(DieselEngine.eFuelType), enumValueFromUser);
             Enum.TryParse(enumValueFromUser, out DieselEngine.eFuelType enumFuelType);
             i_Engine.FuelType = enumFuelType;
-
-            // OR THIS WITH ARGUMENT EXCEPTION
-            // i_Engine.FuelType = (DieselEngine.eFuelType)Enum.Parse(typeof(DieselEngine.eFuelType), Console.ReadLine());
-
-
         }
 
-        private void checkValidationOfEnumValue(Type i_enumType, string enumValue)
+        private void checkValidationOfEnumValue(Type i_EnumType, string i_EnumValue)
         {
-            if (!Enum.IsDefined(i_enumType, enumValue))
+            if (!Enum.IsDefined(i_EnumType, i_EnumValue))
             {
                 throw new FormatException("Invalid enum value");
             }
@@ -277,36 +283,40 @@ namespace Ex03.ConsoleUI
         private void updateEngineDetails(Vehicle i_Vehicle)
         {
             getEngineDetailsFromUser(i_Vehicle.Engine);
-            updateEnergyPrecentleft(i_Vehicle);
-        }
-
-        private void updateEnergyPrecentleft(Vehicle i_Vehicle)
-        {
-            // if precent >1 we need to add exception
-            i_Vehicle.EnergyPrecentleft = (float)Math.Round(i_Vehicle.Engine.EnergyAmountLeft / i_Vehicle.Engine.MaxEnergyPossibleAmount, 2);            
+            i_Vehicle.UpdateEnergyPercentLeft();
         }
 
         private void getEngineDetailsFromUser(Engine i_Engine)
         {
             Console.WriteLine("Please enter engine's max energy possible amount");
-            float.TryParse(Console.ReadLine(), out float maxEnergyPossibleAmount);
+            if(!float.TryParse(Console.ReadLine(), out float maxEnergyPossibleAmount))
+            {
+                throw new FormatException("Invalid input");
+            }
+
             i_Engine.MaxEnergyPossibleAmount = maxEnergyPossibleAmount;
             Console.WriteLine("Please enter engine's energy amount left");
-            float.TryParse(Console.ReadLine(), out float energyAmountLeft);
+            if(!float.TryParse(Console.ReadLine(), out float energyAmountLeft))
+            {
+                throw new FormatException("Invalid Input");
+            }
+
             i_Engine.EnergyAmountLeft = energyAmountLeft;
         }
 
         private void updateGarageVehicleStatusToBeingRepaired(string i_PlateNumberOfVehicle)
         {
-            m_GarageManager.Garage.VehiclesInGarage[i_PlateNumberOfVehicle].VehicleStatus = GaragedVehicle.eVehicleStatus.BeingRepaired;
+            r_Garage.GetGaragedVehicle(i_PlateNumberOfVehicle).VehicleStatus = GaragedVehicle.eVehicleStatus.BeingRepaired;
         }
 
         private void createAndAddGarageVehicle(Vehicle i_Vehicle)
         {
-            GaragedVehicle newVehicleToEnterGarage = new GaragedVehicle();
-            newVehicleToEnterGarage.Vehicle = i_Vehicle;
+            GaragedVehicle newVehicleToEnterGarage = new GaragedVehicle
+            {
+                Vehicle = i_Vehicle
+            };
             getOwnerDetails(newVehicleToEnterGarage);
-            m_GarageManager.Garage.VehiclesInGarage.Add(newVehicleToEnterGarage.Vehicle.PlateNumber, newVehicleToEnterGarage);
+            r_Garage.AddVehicleToGarage(newVehicleToEnterGarage);
         }
 
         private void getOwnerDetails(GaragedVehicle i_GarageVehicle)
@@ -446,30 +456,30 @@ namespace Ex03.ConsoleUI
             return declaredOnlyPropertiesOfObjectWhichHaveSetters;
         }
 
-        private void getWheelsDetailsFromUser(Vehicle i_vehicle)
+        private void getWheelsDetailsFromUser(Vehicle i_Vehicle)
         {
             string wheelManufacturer;
-            int WheelMaxTierPressureByManufacturer;
+            int wheelMaxTierPressureByManufacturer;
             int wheelCurrentTierPressure;
 
             Console.WriteLine("Would you like to set all wheels with the same parameters? Y/N");
             string userAnswer = Console.ReadLine();
             if(userAnswer != "Y" && userAnswer != "N")
             {
-                throw new Exception("Invalid Input");
+                throw new ArgumentException("Invalid Input");
             }
 
             if (userAnswer == "Y")
             {
-                askUserForWheelDetails(out wheelManufacturer, out WheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
-                i_vehicle.attachAllWheelsWithSameDetails(wheelManufacturer, WheelMaxTierPressureByManufacturer, wheelCurrentTierPressure); 
+                askUserForWheelDetails(out wheelManufacturer, out wheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
+                i_Vehicle.AttachAllWheelsWithSameDetails(wheelManufacturer, wheelMaxTierPressureByManufacturer, wheelCurrentTierPressure); 
             }
             else
             {
-                for (int i = 0; i < i_vehicle.Wheels.Capacity; i++)
+                for (int i = 0; i < i_Vehicle.Wheels.Capacity; i++)
                 {
-                    askUserForWheelDetails(out wheelManufacturer, out WheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
-                    i_vehicle.attachWheel(wheelManufacturer, WheelMaxTierPressureByManufacturer, wheelCurrentTierPressure);
+                    askUserForWheelDetails(out wheelManufacturer, out wheelMaxTierPressureByManufacturer, out wheelCurrentTierPressure);
+                    i_Vehicle.AttachWheel(wheelManufacturer, wheelMaxTierPressureByManufacturer, wheelCurrentTierPressure);
                 }
             }
         }
@@ -480,21 +490,24 @@ namespace Ex03.ConsoleUI
             o_Manufacturer = Console.ReadLine();
 
             Console.WriteLine("Please enter max tier pressure by manufacturer");
-            int.TryParse(Console.ReadLine(), out o_MaxTierPressureByManufacturer);
-            // check if parse did well
+            if(!int.TryParse(Console.ReadLine(), out o_MaxTierPressureByManufacturer))
+            {
+                throw new FormatException("Invalid Input");
+            }
 
             Console.WriteLine("Please enter current tier pressure");
-            int.TryParse(Console.ReadLine(), out o_CurrentTierPressure);
-            // check if parse did well
-
+            if(!int.TryParse(Console.ReadLine(), out o_CurrentTierPressure))
+            {
+                throw new FormatException("Invalid Input");
+            }
         }
 
-        private Vehicle createVehicleWithBasicDataMembersFromUser(VehicleCreator.eSupportedVehicleTypes vehicleType, string i_PlateNumberOfVehicle)
+        private Vehicle createVehicleWithBasicDataMembersFromUser(VehicleCreator.eSupportedVehicleTypes i_VehicleType, string i_PlateNumberOfVehicle)
         {
             Console.WriteLine("Please enter model of vehicle");
             string modelOfVehicle = Console.ReadLine();
 
-            return m_VehicleCreator.buildVehicleByType(vehicleType, modelOfVehicle, i_PlateNumberOfVehicle);
+            return r_VehicleCreator.BuildVehicleByType(i_VehicleType, modelOfVehicle, i_PlateNumberOfVehicle);
         }
         
         private string getLicenseNumberOfVehicle()
@@ -505,9 +518,9 @@ namespace Ex03.ConsoleUI
             return licenseNumberFromUser;
         }
 
-        private void doesStringContainsOnlyNumbersOrLetters(string str)
+        private void doesStringContainsOnlyNumbersOrLetters(string i_Str)
         {
-            foreach (char charInStr in str)
+            foreach (char charInStr in i_Str)
             {
                 if (!char.IsLetter(charInStr) && !char.IsDigit(charInStr))
                 {
@@ -518,31 +531,14 @@ namespace Ex03.ConsoleUI
 
         private VehicleCreator.eSupportedVehicleTypes getVehicleTypeFromUser()
         {
-            VehicleCreator.eSupportedVehicleTypes vehicleChosenType = 0;
-
-            try
+            Console.WriteLine("Please enter vehicle type from the following options which you would like to enter into our garage");
+            r_VehicleCreator.PrintAllSupportedVehicleTypes();
+            if(!Enum.TryParse(Console.ReadLine(), out VehicleCreator.eSupportedVehicleTypes vehicleChosenType) || !Enum.IsDefined(typeof(VehicleCreator.eSupportedVehicleTypes), vehicleChosenType))
             {
-                Console.WriteLine("Please enter vehicle type from the following options which you would like to enter into our garage");
-                printAllSupportedvehicleeTypes();
-                Enum.TryParse(Console.ReadLine(), out vehicleChosenType);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("out of range");
-                getVehicleTypeFromUser();
+                throw new FormatException("Invalid vehicle type");
             }
 
             return vehicleChosenType;
-        }
-
-        private void printAllSupportedvehicleeTypes()
-        {
-            foreach (VehicleCreator.eSupportedVehicleTypes action in Enum.GetValues(typeof(VehicleCreator.eSupportedVehicleTypes)))
-            {
-                int value = (int)action;
-                string optionName = action.ToString();
-                Console.WriteLine($"{value}. {optionName}");
-            }
         }
     }
 }

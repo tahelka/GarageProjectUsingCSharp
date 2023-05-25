@@ -7,7 +7,7 @@ namespace Ex03.ConsoleUI
         {
             ConsoleUI.GarageUI userInterface = new ConsoleUI.GarageUI();
 
-            while (userInterface.m_IsGarageInAction)
+            while (userInterface.IsGarageInAction)
             {
                 userInterface.ChooseAction();
             }

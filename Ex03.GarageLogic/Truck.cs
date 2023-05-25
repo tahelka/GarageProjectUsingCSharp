@@ -4,7 +4,7 @@ namespace Ex03.GarageLogic
 {
     public class Truck : Vehicle
     {
-        const int k_WheelsNumber = 14;
+        private const int k_WheelsNumber = 14;
         public bool DoesContainDangerousMaterials { get; set; }
         public float PayloadCapacity { get; set; }
 

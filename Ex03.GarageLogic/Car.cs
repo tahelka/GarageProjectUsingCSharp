@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace Ex03.GarageLogic
 {
     public class Car : Vehicle
     {
-        const int k_WheelsNumber = 4;
+        private const int k_WheelsNumber = 4;
         public eColor Color { get; set; }
         public eNumOfDoors NumOfDoors { get; set; }
 
