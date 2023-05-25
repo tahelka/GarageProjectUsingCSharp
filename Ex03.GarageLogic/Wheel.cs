@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -36,13 +33,11 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Manufacturer: {m_Manufacturer}");
-            sb.AppendLine($"Max Tire Pressure: {MaxTierPressureByManufacturer}");
-            sb.AppendLine($"Current Tire Pressure: {CurrentTierPressure}");
+            sb.Append($@"Manufacturer: {m_Manufacturer}
+Max Tire Pressure: {MaxTierPressureByManufacturer}
+Current Tire Pressure: {CurrentTierPressure}");
 
             return sb.ToString();
         }
-
-
     }
 }

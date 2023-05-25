@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Ex03.ConsoleUI
 {
     class Program
@@ -12,7 +7,7 @@ namespace Ex03.ConsoleUI
         {
             ConsoleUI.GarageUI userInterface = new ConsoleUI.GarageUI();
 
-            while (true)
+            while (userInterface.m_IsGarageInAction)
             {
                 userInterface.ChooseAction();
             }

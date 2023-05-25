@@ -9,36 +9,7 @@ namespace Ex03.GarageLogic
     {
         const int k_WheelsNumber = 4;
         public eColor Color { get; set; }
-        //{
-        //    get { return Color; }
-        //    set
-        //    {
-        //        if (Enum.IsDefined(typeof(eColor), value))
-        //        {
-        //            Color = value;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentException("Invalid enum value");
-        //        }
-        //    }
-        //}
-
         public eNumOfDoors NumOfDoors { get; set; }
-        //{
-        //    get { return NumOfDoors; }
-        //    set
-        //    {
-        //        if (Enum.IsDefined(typeof(eNumOfDoors), value))
-        //        {
-        //            NumOfDoors = value;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentException("Invalid enum value");
-        //        }
-        //    }
-        //}
 
         public enum eColor
         {
@@ -56,8 +27,6 @@ namespace Ex03.GarageLogic
             Five = 5
         }
 
-    
-
         public Car(string i_ModelOfVehicle, string i_PlateNumberOfVehicle) : base(i_ModelOfVehicle, i_PlateNumberOfVehicle)
         {
             Wheels.Capacity = k_WheelsNumber;
@@ -66,15 +35,11 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(base.ToString());
-            sb.AppendLine($"Color: {Color}");
-            sb.AppendLine($"Number of Doors: {NumOfDoors}");
+            sb.AppendLine($@"{base.ToString()}
+Color: {Color}
+Number of Doors: {NumOfDoors}");
 
             return sb.ToString();
         }
-        //public override string GetSpecialPropertiesNames()
-        //{
-        //    return Enum.GetNames(typeof(eCarSpecialProperties));
-        //}
     }
 }

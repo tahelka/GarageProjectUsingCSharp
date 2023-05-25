@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
-using System.Runtime.InteropServices;
-//using System.ComponentModel;
 using VehicleCreator = Ex03.GarageLogic.VehicleCreator;
 using GarageManager = Ex03.GarageLogic.GarageManager;
 using Vehicle = Ex03.GarageLogic.Vehicle;
 using  Ex03.GarageLogic;
 using static Ex03.GarageLogic.Garage;
-using static Ex03.GarageLogic.Car;
 
 namespace Ex03.ConsoleUI
 {
-    
     public class GarageUI
     {
+        public bool m_IsGarageInAction = true;
         VehicleCreator m_VehicleCreator;
         GarageManager m_GarageManager;
 
@@ -26,6 +21,7 @@ namespace Ex03.ConsoleUI
             m_VehicleCreator = new VehicleCreator();
             m_GarageManager = new GarageManager();
         }
+
         public enum eActions
         {
             enterNewVechicle = 1,
@@ -37,6 +33,7 @@ namespace Ex03.ConsoleUI
             getVehicleByPlateNum,
             exit
         }
+
         public void ChooseAction()
         {
             eActions action = getActionNumber();
@@ -64,6 +61,7 @@ namespace Ex03.ConsoleUI
                     ShowVehicleState(); //done
                     break;
                 case eActions.exit:
+                    m_IsGarageInAction = false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -73,8 +71,8 @@ namespace Ex03.ConsoleUI
         private void ShowVehicleState()
         {
             Console.WriteLine("enter the vehicle License number");
-            string plateNumber = GetLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            string plateNumber = getLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException("Vehicle is not in garage");
             }
@@ -85,8 +83,8 @@ namespace Ex03.ConsoleUI
         private void chargeBattery()
         {
             Console.WriteLine("enter the vehicle License number");
-            string plateNumber = GetLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            string plateNumber = getLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException();
             }
@@ -101,8 +99,8 @@ namespace Ex03.ConsoleUI
         private void fillFuelType()
         {
             Console.WriteLine("enter the vehicle License number");
-            string plateNumber = GetLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            string plateNumber = getLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException();
             }
@@ -123,8 +121,8 @@ namespace Ex03.ConsoleUI
         private void inflateTiersToMax()
         {
             Console.WriteLine("enter the vehicle License number");
-            string plateNumber = GetLicenseNumberOfVehicle();
-            if (!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            string plateNumber = getLicenseNumberOfVehicle();
+            if (!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException();
             }
@@ -134,14 +132,14 @@ namespace Ex03.ConsoleUI
 
         private void ChangeVeihcleStatus()
         {
-            string plateNumber = GetLicenseNumberOfVehicle();
-            if(!m_GarageManager.Garage.isVehicleInGarage(plateNumber))
+            string plateNumber = getLicenseNumberOfVehicle();
+            if(!m_GarageManager.Garage.IsVehicleInGarage(plateNumber))
             {
                 throw new ArgumentException();
             }
 
             GaragedVehicle.eVehicleStatus newStatus = ChooseStatusOfVehicle();
-            m_GarageManager.setStatusOfAVehicle(plateNumber, newStatus);
+            m_GarageManager.SetStatusOfAVehicle(plateNumber, newStatus);
         }
 
         private GaragedVehicle.eVehicleStatus ChooseStatusOfVehicle()
@@ -167,7 +165,7 @@ namespace Ex03.ConsoleUI
                     ? $"All vehicles in the garage in status {i_Filter}:"
                     : "All vehicles in the garage:");
 
-            List<string> vehiclesList = m_GarageManager.getVehiclesPlateNumbersByStatus(i_Filter);
+            List<string> vehiclesList = m_GarageManager.GetVehiclesPlateNumbersByStatus(i_Filter);
             if(vehiclesList != null)
             {
                 foreach(string plateNumber in vehiclesList)
@@ -191,7 +189,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public eActions getActionNumber()
+        private eActions getActionNumber()
         {
             eActions chosenActionByUser = 0;
 
@@ -210,8 +208,7 @@ namespace Ex03.ConsoleUI
             return chosenActionByUser;
         }
 
-
-        public void printActionsMenu()
+        private void printActionsMenu()
         {
             Console.WriteLine($@"
 1. Enter New vehicle to the garage
@@ -224,18 +221,18 @@ namespace Ex03.ConsoleUI
 8. exit");
         }
 
-        public void EnterNewVehicleToGarage()
+        private void EnterNewVehicleToGarage()
         {         
-            string plateNumberOfVehicle = GetLicenseNumberOfVehicle();
-            bool isVehicleInGarage = m_GarageManager.Garage.isVehicleInGarage(plateNumberOfVehicle);
+            string plateNumberOfVehicle = getLicenseNumberOfVehicle();
+            bool isVehicleInGarage = m_GarageManager.Garage.IsVehicleInGarage(plateNumberOfVehicle);
 
             if (isVehicleInGarage)
             {
                 updateGarageVehicleStatusToBeingRepaired(plateNumberOfVehicle);            }
             else
             {
-                VehicleCreator.eSupportedVehicleTypes vehicleType = GetVehicleTypeFromUser();
-                Vehicle newVehicleToEnterToGarage = CreateVehicleWithBasicDataMembersFromUser(vehicleType, plateNumberOfVehicle);
+                VehicleCreator.eSupportedVehicleTypes vehicleType = getVehicleTypeFromUser();
+                Vehicle newVehicleToEnterToGarage = createVehicleWithBasicDataMembersFromUser(vehicleType, plateNumberOfVehicle);
                 if(newVehicleToEnterToGarage.isElectric(vehicleType))
                 {
                     newVehicleToEnterToGarage.Engine = new ElectricEngine();
@@ -243,11 +240,37 @@ namespace Ex03.ConsoleUI
                 else
                 {
                     newVehicleToEnterToGarage.Engine = new DieselEngine();
+                    getDieselEngineDetails((DieselEngine)newVehicleToEnterToGarage.Engine);
                 }
                 updateEngineDetails(newVehicleToEnterToGarage);
-                GetWheelsDetailsFromUser(newVehicleToEnterToGarage);
-                GetDeclaredOnlyPropertiesFromUser(newVehicleToEnterToGarage);
+                getWheelsDetailsFromUser(newVehicleToEnterToGarage);
+                getDeclaredOnlyPropertiesFromUser(newVehicleToEnterToGarage);
                 createAndAddGarageVehicle(newVehicleToEnterToGarage);
+            }
+        }
+
+        private void getDieselEngineDetails(DieselEngine i_Engine)
+        {
+            Console.WriteLine("Please enter vehicle's fuel type");
+            askUserToEnterSpecificEnumValues(typeof(DieselEngine).GetProperty("FuelType"));
+
+            // OR THIS WITH FORMAT EXCEPTION
+            string enumValueFromUser = Console.ReadLine();
+            checkValidationOfEnumValue(typeof(DieselEngine.eFuelType), enumValueFromUser);
+            Enum.TryParse(enumValueFromUser, out DieselEngine.eFuelType enumFuelType);
+            i_Engine.FuelType = enumFuelType;
+
+            // OR THIS WITH ARGUMENT EXCEPTION
+            // i_Engine.FuelType = (DieselEngine.eFuelType)Enum.Parse(typeof(DieselEngine.eFuelType), Console.ReadLine());
+
+
+        }
+
+        private void checkValidationOfEnumValue(Type i_enumType, string enumValue)
+        {
+            if (!Enum.IsDefined(i_enumType, enumValue))
+            {
+                throw new FormatException("Invalid enum value");
             }
         }
 
@@ -278,15 +301,15 @@ namespace Ex03.ConsoleUI
             m_GarageManager.Garage.VehiclesInGarage[i_PlateNumberOfVehicle].VehicleStatus = GaragedVehicle.eVehicleStatus.BeingRepaired;
         }
 
-        public void createAndAddGarageVehicle(Vehicle i_Vehicle)
+        private void createAndAddGarageVehicle(Vehicle i_Vehicle)
         {
             GaragedVehicle newVehicleToEnterGarage = new GaragedVehicle();
             newVehicleToEnterGarage.Vehicle = i_Vehicle;
-            GetOwnerDetails(newVehicleToEnterGarage);
+            getOwnerDetails(newVehicleToEnterGarage);
             m_GarageManager.Garage.VehiclesInGarage.Add(newVehicleToEnterGarage.Vehicle.PlateNumber, newVehicleToEnterGarage);
         }
 
-        public void GetOwnerDetails(GaragedVehicle i_GarageVehicle)
+        private void getOwnerDetails(GaragedVehicle i_GarageVehicle)
         {
             Console.WriteLine("Please enter owner's name");
             i_GarageVehicle.OwnerName = Console.ReadLine();
@@ -294,9 +317,9 @@ namespace Ex03.ConsoleUI
             i_GarageVehicle.OwnerPhoneNumber = Console.ReadLine();
         }
 
-        public void GetDeclaredOnlyPropertiesFromUser(Vehicle i_Vehicle)
+        private void getDeclaredOnlyPropertiesFromUser(Vehicle i_Vehicle)
         {
-            List<string> declaredOnlyProperties = GetDeclaredOnlyPropertiesOfObjectWhichHaveSetters(i_Vehicle);
+            List<string> declaredOnlyProperties = getDeclaredOnlyPropertiesOfObjectWhichHaveSetters(i_Vehicle);
 
             foreach (string dataMember in declaredOnlyProperties)
             {
@@ -305,8 +328,6 @@ namespace Ex03.ConsoleUI
                 setProperty(i_Vehicle, dataMember, userInputForDataMember);
             }
         }
-        
-
 
         private void setProperty(object i_obj, string i_DataMember, string i_DataMemberValue)
         {
@@ -317,11 +338,7 @@ namespace Ex03.ConsoleUI
 
             if (dataMemberInfo.PropertyType.IsEnum)
             {
-                if (!Enum.IsDefined(dataMemberInfo.PropertyType, i_DataMemberValue))
-                {
-                    throw new FormatException();
-                }
-
+                checkValidationOfEnumValue(dataMemberInfo.PropertyType, i_DataMemberValue);
                 valueToSet = Enum.Parse(dataMemberInfo.PropertyType, i_DataMemberValue);
             }
             else
@@ -331,10 +348,8 @@ namespace Ex03.ConsoleUI
             
             setMethod.Invoke(i_obj, new object[] { valueToSet });
         }
-
-
-        
-        public void askUserToEnterPropertyValue(object i_Obj, string i_DataMember)
+     
+        private void askUserToEnterPropertyValue(object i_Obj, string i_DataMember)
         {
             if (!string.IsNullOrEmpty(i_DataMember))
             {
@@ -343,7 +358,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public StringBuilder createMsgForUserToEnterCurrentProperty(string i_DataMember)
+        private StringBuilder createMsgForUserToEnterCurrentProperty(string i_DataMember)
         {
             StringBuilder msgForUserToEnterCurrentDataMember = new StringBuilder("Please enter the vehicle's ");
 
@@ -369,14 +384,14 @@ namespace Ex03.ConsoleUI
             return msgForUserToEnterCurrentDataMember;
         }
 
-        public void checkIfEnumOrBoolAndAskUserForSpecificValues(object i_Obj, string i_DataMember)
+        private void checkIfEnumOrBoolAndAskUserForSpecificValues(object i_Obj, string i_DataMember)
         {
             Type type = i_Obj.GetType();
             PropertyInfo dataMemberInfo = type.GetProperty(i_DataMember);
 
             if (dataMemberInfo.PropertyType.IsEnum)
             {
-                AskUserToEnterSpecificEnumValues(i_Obj, dataMemberInfo);
+                askUserToEnterSpecificEnumValues(dataMemberInfo);
             } 
             else if(dataMemberInfo.PropertyType == typeof(bool))
             {
@@ -389,7 +404,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Type true/false (case sensitive): ");
         }
 
-        public void AskUserToEnterSpecificEnumValues(object i_Obj, PropertyInfo i_DataMemberInfo)
+        private void askUserToEnterSpecificEnumValues(PropertyInfo i_DataMemberInfo)
         {
             Type enumType = i_DataMemberInfo.PropertyType;
             object instance = Activator.CreateInstance(this.GetType());
@@ -413,7 +428,7 @@ namespace Ex03.ConsoleUI
 
         }
 
-        public List<string> GetDeclaredOnlyPropertiesOfObjectWhichHaveSetters(object i_Obj)
+        private List<string> getDeclaredOnlyPropertiesOfObjectWhichHaveSetters(object i_Obj)
         {
             Type type = i_Obj.GetType();
             PropertyInfo[] properties = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
@@ -431,7 +446,7 @@ namespace Ex03.ConsoleUI
             return declaredOnlyPropertiesOfObjectWhichHaveSetters;
         }
 
-        public void GetWheelsDetailsFromUser(Vehicle i_vehicle)
+        private void getWheelsDetailsFromUser(Vehicle i_vehicle)
         {
             string wheelManufacturer;
             int WheelMaxTierPressureByManufacturer;
@@ -459,7 +474,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void askUserForWheelDetails(out string o_Manufacturer, out int o_MaxTierPressureByManufacturer, out int o_CurrentTierPressure)
+        private void askUserForWheelDetails(out string o_Manufacturer, out int o_MaxTierPressureByManufacturer, out int o_CurrentTierPressure)
         {
             Console.WriteLine("Please enter wheel manufacturer");
             o_Manufacturer = Console.ReadLine();
@@ -474,38 +489,34 @@ namespace Ex03.ConsoleUI
 
         }
 
-        public Vehicle CreateVehicleWithBasicDataMembersFromUser(VehicleCreator.eSupportedVehicleTypes vehicleType, string i_PlateNumberOfVehicle)
+        private Vehicle createVehicleWithBasicDataMembersFromUser(VehicleCreator.eSupportedVehicleTypes vehicleType, string i_PlateNumberOfVehicle)
         {
             Console.WriteLine("Please enter model of vehicle");
             string modelOfVehicle = Console.ReadLine();
 
             return m_VehicleCreator.buildVehicleByType(vehicleType, modelOfVehicle, i_PlateNumberOfVehicle);
         }
-
-
-        public bool isVehicleElectric()
-        {
-            bool isElectricVehicle;
-
-            Console.WriteLine("Is your vehicle on battery? Y/N");
-            string userChoice = Console.ReadLine();
-            if (userChoice != "Y" && userChoice != "N")
-            {
-                throw new Exception("Please Enter Y/N");
-            }
-
-            isElectricVehicle = userChoice == "Y" ? true : false;           
-
-            return isElectricVehicle;
-        }
         
-        public string GetLicenseNumberOfVehicle()
+        private string getLicenseNumberOfVehicle()
         {
             Console.WriteLine("Please enter plate number of vehicle");
-            return Console.ReadLine();
+            string licenseNumberFromUser = Console.ReadLine();
+            doesStringContainsOnlyNumbersOrLetters(licenseNumberFromUser);
+            return licenseNumberFromUser;
         }
 
-        public VehicleCreator.eSupportedVehicleTypes GetVehicleTypeFromUser()
+        private void doesStringContainsOnlyNumbersOrLetters(string str)
+        {
+            foreach (char charInStr in str)
+            {
+                if (!char.IsLetter(charInStr) && !char.IsDigit(charInStr))
+                {
+                    throw new FormatException();
+                }
+            }
+        }
+
+        private VehicleCreator.eSupportedVehicleTypes getVehicleTypeFromUser()
         {
             VehicleCreator.eSupportedVehicleTypes vehicleChosenType = 0;
 
@@ -518,13 +529,13 @@ namespace Ex03.ConsoleUI
             catch (ArgumentException)
             {
                 Console.WriteLine("out of range");
-                GetVehicleTypeFromUser();
+                getVehicleTypeFromUser();
             }
 
             return vehicleChosenType;
         }
 
-        public void printAllSupportedvehicleeTypes()
+        private void printAllSupportedvehicleeTypes()
         {
             foreach (VehicleCreator.eSupportedVehicleTypes action in Enum.GetValues(typeof(VehicleCreator.eSupportedVehicleTypes)))
             {
@@ -533,30 +544,5 @@ namespace Ex03.ConsoleUI
                 Console.WriteLine($"{value}. {optionName}");
             }
         }
-
-        //public eNumOfDoors ChooseNumOfDoors()
-        //{
-        //    Console.WriteLine("choose number of doors from the list");
-        //    foreach (eNumOfDoors value in Enum.GetValues(typeof(eNumOfDoors)))
-        //    {
-        //        Console.WriteLine(value.ToString());
-        //    }
-
-        //    Enum.TryParse(Console.ReadLine(), out eNumOfDoors res);
-        //    return res;
-        //}
-
-        //public eColor ChooseCarColor()
-        //{
-        //    Console.WriteLine("choose the color of the car from the list");
-        //    foreach (eColor value in Enum.GetValues(typeof(eColor)))
-        //    {
-        //        Console.WriteLine(value.ToString());
-        //    }
-
-        //    Enum.TryParse(Console.ReadLine(), out eColor res);
-        //    return res;
-        //}
-
     }
 }

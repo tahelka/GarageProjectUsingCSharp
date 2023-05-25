@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -18,8 +16,28 @@ namespace Ex03.GarageLogic
             }
             public Vehicle Vehicle { get; set; }
             public string OwnerName { get; set; }
-            public string OwnerPhoneNumber { get; set; }
+            private string m_OwnerPhoneNumber;
             public eVehicleStatus VehicleStatus { get; set; }
+
+            public string OwnerPhoneNumber
+            {
+                get
+                {
+                    return m_OwnerPhoneNumber;
+                }
+                set
+                {
+                    foreach (char charInStr in value)
+                    {
+                        if (!char.IsDigit(charInStr))
+                        {
+                            throw new FormatException();
+                        }
+                    }
+
+                    m_OwnerPhoneNumber = value;
+                }
+            }
 
             public GaragedVehicle()
             {
@@ -42,14 +60,15 @@ Vehicle Status: {VehicleStatus}
         {
             VehiclesInGarage = new Dictionary<string, GaragedVehicle>();
         }
-        public bool isVehicleInGarage(string i_PlateNumber)
+
+        public bool IsVehicleInGarage(string i_PlateNumber)
         {
             return VehiclesInGarage.ContainsKey(i_PlateNumber);
         }
 
-        public void Add(GaragedVehicle i_VehicleToAdd)
-        {
-            VehiclesInGarage[i_VehicleToAdd.Vehicle.PlateNumber] = i_VehicleToAdd;
-        }
+        //public void Add(GaragedVehicle i_VehicleToAdd)
+        //{
+        //    VehiclesInGarage[i_VehicleToAdd.Vehicle.PlateNumber] = i_VehicleToAdd;
+        //}
     }
 }

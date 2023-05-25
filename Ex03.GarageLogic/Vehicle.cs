@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Ex03.GarageLogic
@@ -33,11 +32,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public void SetTirePressure(int tirePressure)
-        {
-
-        }
-
         public bool isElectric(VehicleCreator.eSupportedVehicleTypes i_VehicleType)
         {
             return i_VehicleType.ToString().IndexOf("electric", StringComparison.OrdinalIgnoreCase) >= 0;
@@ -46,15 +40,13 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Model: {Model}");
-            sb.AppendLine($"Plate Number: {PlateNumber}");
-            sb.AppendLine($"Energy Percent Left: {EnergyPrecentleft}");
-            sb.AppendLine(Engine.ToString());
-            sb.AppendLine(Wheels[0].ToString());
+            sb.Append($@"Model: {Model}
+Plate Number: {PlateNumber}
+Energy Percent Left: {EnergyPrecentleft}%
+{Engine.ToString()}
+{Wheels[0].ToString()}");
 
             return sb.ToString();
         }
-        //public abstract string GetSpecialPropertiesNames();
-
     }
 }

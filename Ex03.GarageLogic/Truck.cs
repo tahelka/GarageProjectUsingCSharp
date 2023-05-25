@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -19,13 +16,12 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(base.ToString());
-            sb.AppendLine($"Number of Wheels: {Wheels.Count}");
-            sb.AppendLine($"Does Contain Dangerous Materials: {DoesContainDangerousMaterials}");
-            sb.AppendLine($"Payload Capacity: {PayloadCapacity}");
+            sb.AppendLine($@"{base.ToString()}
+Number of Wheels: {Wheels.Count}
+Does Contain Dangerous Materials: {DoesContainDangerousMaterials}
+Payload Capacity: {PayloadCapacity} liter");
 
             return sb.ToString();
         }
-
     }
 }

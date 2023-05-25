@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -19,8 +16,7 @@ namespace Ex03.GarageLogic
         public Vehicle buildVehicleByType(eSupportedVehicleTypes i_vehicleType, string i_ModelOfVehicle, string i_PlateNumberOfVehicle)
         {
             Vehicle res;
-            bool isElectricCar = true;
-
+            
             switch (i_vehicleType)
             {
                 case eSupportedVehicleTypes.ElectricCar:
@@ -36,15 +32,9 @@ namespace Ex03.GarageLogic
                     break;
                 default:
                     throw new ArgumentException();
-                    break;
             }
-
-           
+ 
             return res;
         }
-
-        
-       
-
     }
 }
